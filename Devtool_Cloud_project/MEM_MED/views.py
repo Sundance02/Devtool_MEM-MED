@@ -69,3 +69,8 @@ class calendar(View):
 
 def day_view(request, year, month, day):
     return HttpResponse(f"You clicked on {day}/{month}/{year}")
+
+class MedicineAddView(View):
+    def get(self, request):
+    
+        return render(request, 'add-medicine.html', {})

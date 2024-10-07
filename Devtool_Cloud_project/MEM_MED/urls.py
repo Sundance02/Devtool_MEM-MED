@@ -8,4 +8,5 @@ urlpatterns = [
     path("calendar/", views.calendar.as_view(), name="calendar"),
     path("calendar/<int:year>/<int:month>/", views.calendar.as_view(), name="calendar"),
     path('day/<int:year>/<int:month>/<int:day>/', views.day_view, name='day_view'),  # You'll need to create this view
+    path("medicine/add/", views.MedicineAddView.as_view(), name="add-medicine"),
 ]
