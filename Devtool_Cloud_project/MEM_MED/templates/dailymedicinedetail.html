@@ -4,30 +4,65 @@
 
 {% block mycss %}
 <style>
-    .outerdiv{
-        background: rgb(224, 223, 223);
+    .outerdiv {
+        background: #E8E8E8;
         margin-top: 20px;
-        margin-left: 20px;
-        border-radius: 15px;
+        border-radius: 12px;
+        padding: 10px;
     }
+
+    .innerdiv {
+        background-color: white;
+        border-radius: 12px;
+        padding: 15px;
+        padding-bottom: 0;
+        margin: 15px;
+    }
+
+    .status_whitebox {
+        background-color: #FF9F9F;
+        border-radius: 12px;
+        padding: 8px;
+    }
+
+    .status_datebox {
+        background-color: #FF9F9F;
+        border-radius: 12px;
+        padding: 0px;
+    }
+
+
 </style>
 {% endblock %}
 
 
 {% block content %}
 
-<div class="container outerdiv text-black">
-    <p>test</p>
-    <p>test</p>
-    <p>test</p>
-    <p>test</p>
-    <p>test</p>
-    <p>test</p>
-    <p>test</p>
-    <p>test</p>
-    <p>test</p>
-    <p>test</p>
-    <p>test</p>
+<div class="container-fluid outerdiv text-black col-11">
+    <!-- กล่องขาวกล่องเเรก -->
+    <div class="row innerdiv">
+        <div class="row">
+            <h5 class="col-7">17 มกราคม 2024</h5>
+            <div class="col-5 status_whitebox text-center">
+                กินยาไม่ครบ
+            </div>
+        </div>
+        <div class="row">
+            <p class="col" style="font-size: 13px;">เด็กชายโดนไก่จิกตาย บนปากโอ่ง</p>
+        </div>
+    </div>
+
+    <!-- กล่องเช้า + มีกรณีกินครบ-->
+    <div class="row innerdiv" style="background-color: #C4F0FA;">
+        <div class="row">
+            <h5 class="col-4">ตอนเช้า</h5>
+            <div class="col-5"><p style="font-size: 12px;">จำนวนยาที่ต้องทาน:1เม็ด</p></div>
+            <div class="col-3 status_datebox text-center">
+                <p style="font-size: 13px;">กินยาครบ</p>         
+            </div>
+        </div>
+    </div>
+
 </div>
 
 {% endblock %}
