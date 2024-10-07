@@ -11,3 +11,8 @@ class daily_medicine_detail(View):
     def get(self, request):
     
         return render(request, 'dailymedicinedetail.html', {"form":1, "teacher":2})
+
+class MedicineAddView(View):
+    def get(self, request):
+    
+        return render(request, 'add-medicine.html', {})
