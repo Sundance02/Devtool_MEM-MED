@@ -1,0 +1,57 @@
+{% extends 'layout.html' %}
+{% block name %}{{ month_name }} {{ year }}{% endblock %}
+
+{% block mycss %}
+<style>
+    td {
+        cursor: pointer;
+    }
+    td:hover {
+        background-color: #f0f0f0;
+    }
+    .highlight {
+        background-color: rgb(192, 230, 255) !important; /* Use !important to ensure it overrides Bootstrap */
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="text-center">{{ month_name }} {{ year }}</h1>
+    <div class="text-center mb-3">
+        <a class="btn btn-secondary" href="{% url 'calendar' year=prev_year month=prev_month %}">Previous Month</a>
+        <a class="btn btn-secondary" href="{% url 'calendar' year=next_year month=next_month %}">Next Month</a>
+    </div>
+    <table class="table table-bordered text-center">
+        <thead>
+            <tr>
+                <th scope="col">Sun</th>
+                <th scope="col">Mon</th>
+                <th scope="col">Tue</th>
+                <th scope="col">Wed</th>
+                <th scope="col">Thu</th>
+                <th scope="col">Fri</th>
+                <th scope="col">Sat</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for week in month_days %}
+            <tr>
+                {% for day in week %}
+                <td class="{% if day in log_dates %}highlight{% endif %}">
+                    {% if day != 0 %}
+                    <a href="{% url 'day_view' year=year month=month day=day %}">{{ day }}</a>
+                    {% else %}
+                    &nbsp;
+                    {% endif %}
+                </td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+{% block script %}
+{% endblock %}
