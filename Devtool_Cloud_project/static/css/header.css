@@ -1,0 +1,47 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Nunito", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+
+html:lang(th) {
+    font-family: "Mitr", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+#navbackgroundcolor {
+    background: #C4F0FA;
+    padding: 1%;
+}
+
+#homelogo {
+    justify-content: center !important;
+    text-align: center !important;
+}
+
+#usernameprofile {
+    text-align: center;
+    justify-content: center;
+
+    font-size: 100%;
+    font-family: "Nunito", sans-serif;
+    font-weight: 500;
+    font-style: normal;
+}
+
+#pictureprofilediv {
+    justify-content: center;
+    display: flex;
+    text-align: center;
+}
+
+#pictureprofile {
+    border-radius: 30px;
+    text-align: center;
+    justify-content: center;
+}
