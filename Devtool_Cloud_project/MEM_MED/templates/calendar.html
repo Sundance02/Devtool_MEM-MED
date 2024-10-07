@@ -1,0 +1,107 @@
+{% extends 'layout.html' %}
+{% block name %}{{ month_name }} {{ year }}{% endblock %}
+
+{% block mycss %}
+<style>
+    td {
+        cursor: pointer;
+    }
+
+    td:hover {
+        background-color: #f0f0f0;
+    }
+
+    .highlight {
+        background-color: rgb(192, 230, 255) !important;
+        /* Use !important to ensure it overrides Bootstrap */
+    }
+
+    .highlight_missed {
+        background-color: rgb(247, 136, 136) !important;
+        /* Use !important to ensure it overrides Bootstrap */
+    }
+
+    .highlight_not_missed {
+        background-color: rgb(170, 253, 195) !important;
+        /* Use !important to ensure it overrides Bootstrap */
+    }
+
+    .patient-card {
+        background-color: #e9f7fc;
+        /* Light blue background */
+        border-radius: 10px;
+        padding: 20px;
+        margin: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .patient-card h5 {
+        margin-bottom: 10px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="text-center">{{ month_name }} {{ year }}</h1>
+    <div class="text-center mb-3">
+        <a class="btn btn-secondary" href="{% url 'calendar' year=prev_year month=prev_month %}"><</a>
+                <a class="btn btn-secondary" href="{% url 'calendar' year=next_year month=next_month %}">></a>
+    </div>
+    <table class="table table-bordered text-center">
+        <thead>
+            <tr>
+                <th style="background-color: #80c0dd;" scope="col">Sun</th>
+                <th style="background-color: #ddecf3;" scope="col">Mon</th>
+                <th style="background-color: #ddecf3;" scope="col">Tue</th>
+                <th style="background-color: #ddecf3;" scope="col">Wed</th>
+                <th style="background-color: #ddecf3;" scope="col">Thu</th>
+                <th style="background-color: #ddecf3;" scope="col">Fri</th>
+                <th style="background-color: #80c0dd;" scope="col">Sat</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for week in month_days %}
+            <tr>
+                {% for day in week %}
+                <td
+                    class="{% if day in log_dates %}highlight{% elif day in log_dates_missed %}highlight_missed{% elif day in log_dates_not_missed %}highlight_not_missed{% endif %}">
+                    {% if day != 0 %}
+                    <a href="{% url 'day_view' year=year month=month day=day %}">{{ day }}</a>
+                    {% else %}
+                    &nbsp;
+                    {% endif %}
+                </td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="patient-card">
+                <div class="text-center">
+                    <div class="text-left d-flex align-items-center" style="background-color: rgb(233, 233, 233); padding: 10px; border-radius: 10px;">
+                        <img src="https://via.placeholder.com/80" class="rounded-circle me-2" alt="Profile Picture">
+                        <p style="font-size: 90%;">เด็กชาย Nontakorn Pumloyfa <br> <strong>Patient of:</strong> Dr.Panda
+                            DesugaKung <br> <strong>วันเกิด:</strong>31/2/2024</p>
+                    </div>
+                    
+                </div>
+                <br>
+                <p><strong>อายุ:</strong> 99&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>เพศ:</strong> ชาย</p>
+                <p><strong>ยาที่แพ้:</strong> Penicillin</p>
+                <p><strong>โรคประจำตัว:</strong> ไม่มี</p>
+                <p><strong>เบอร์ติดต่อ:</strong> 087-XXXX-XXX</p>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+{% endblock %}
