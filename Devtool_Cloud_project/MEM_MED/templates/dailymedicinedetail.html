@@ -2,6 +2,32 @@
 
 <title>{% block name %} ยาที่ต้องทานวันนี้ {% endblock %}</title>
 
+{% block mycss %}
+<style>
+    .outerdiv{
+        background: rgb(224, 223, 223);
+        margin-top: 20px;
+        margin-left: 20px;
+        border-radius: 15px;
+    }
+</style>
+{% endblock %}
+
+
 {% block content %}
-<h1>test</h1>
+
+<div class="container outerdiv text-black">
+    <p>test</p>
+    <p>test</p>
+    <p>test</p>
+    <p>test</p>
+    <p>test</p>
+    <p>test</p>
+    <p>test</p>
+    <p>test</p>
+    <p>test</p>
+    <p>test</p>
+    <p>test</p>
+</div>
+
 {% endblock %}
