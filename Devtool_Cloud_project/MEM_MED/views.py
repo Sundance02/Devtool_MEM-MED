@@ -22,7 +22,6 @@ class calendar(View):
     def get(self, request, year=None, month=None):
         log = MedicationLog.objects.all()
     
-    # Get current date if year and month are not provided
         if year is None or month is None:
             now = datetime.now()
             year = now.year
@@ -31,14 +30,16 @@ class calendar(View):
             year = int(year)
             month = int(month)
 
-        # Create a calendar object
+ 
         cal = cale.Calendar()
         month_days = cal.monthdayscalendar(year, month)
 
-        # Get all the log dates for the current month
-        log_dates = {log.date_taken.day for log in log if log.date_taken.year == year and log.date_taken.month == month}  # Adjust 'log.date' according to your model's field name
+       
+        log_dates = {log.date_taken.day for log in log if log.date_taken.year == year and log.date_taken.month == month and log.missed == None}
+        log_dates_missed = {log.date_taken.day for log in log if log.date_taken.year == year and log.date_taken.month == month and log.missed == True}
+        log_dates_not_missed = {log.date_taken.day for log in log if log.date_taken.year == year and log.date_taken.month == month and log.missed == False}
 
-        # Previous month
+        
         if month == 1:
             prev_month = 12
             prev_year = year - 1
@@ -46,7 +47,7 @@ class calendar(View):
             prev_month = month - 1
             prev_year = year
 
-        # Next month
+   
         if month == 12:
             next_month = 1
             next_year = year + 1
@@ -54,7 +55,7 @@ class calendar(View):
             next_month = month + 1
             next_year = year
 
-        # Pass data to the template
+
         return render(request, 'calendar.html', {
             'month_days': month_days,
             'year': year,
@@ -64,7 +65,9 @@ class calendar(View):
             'prev_month': prev_month,
             'next_year': next_year,
             'next_month': next_month,
-            'log_dates': log_dates,  # Pass the log dates to the template
+            'log_dates': log_dates, 
+            'log_dates_missed': log_dates_missed,
+            'log_dates_not_missed': log_dates_not_missed
         })
 
 def day_view(request, year, month, day):
