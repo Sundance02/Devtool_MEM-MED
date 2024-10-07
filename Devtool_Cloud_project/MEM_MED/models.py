@@ -14,7 +14,7 @@ class Patient(models.Model):
         return self.name
 
 class Medication(models.Model):
-    image = models.ImageField()
+    image = models.ImageField(upload_to="images/")
     name = models.CharField(max_length=255)
     dosage = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)

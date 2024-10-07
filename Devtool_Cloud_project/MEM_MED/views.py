@@ -7,6 +7,9 @@ from django.http import JsonResponse
 from django.http import HttpResponse
 from django.views import View
 
+#import จาก forms.py ด้านล่างนี้
+from MEM_MED.forms import AddMedicineForm
+
 class daily_medicine_detail(View):
     def get(self, request):
     
@@ -14,5 +17,45 @@ class daily_medicine_detail(View):
 
 class MedicineAddView(View):
     def get(self, request):
+
+        medication_target = Medication.objects.all()
+        form = AddMedicineForm()
+        return render(request, 'add-medicine.html', {"medication_target" : medication_target, "form" : form})
     
-        return render(request, 'add-medicine.html', {})
+    def post(self, request):
+
+        medication_target = Medication.objects.all()
+        form = AddMedicineForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            form.save()
+            return redirect("add-medicine")
+        else:
+            return render(request, 'add-medicine.html', {"medication_target" : medication_target, "form" : form})
+
+class MedicineDeleteView(View):
+
+    def get(self, request, pk):
+        medication_target = Medication.objects.get(pk=pk)
+        medication_target.delete()
+        return redirect('add-medicine')
+
+class MedicineEditView(View):
+
+    def get(self, request, pk):
+        medication_target = Medication.objects.get(pk=pk)
+        form = AddMedicineForm(instance=medication_target)
+        return render(request, 'edit-medicine.html', {"form" : form})
+
+    def post(self, request, pk):
+
+        medication_target = Medication.objects.get(pk=pk)
+        form = AddMedicineForm(request.POST, request.FILES, instance=medication_target)
+
+        if form.is_valid():
+            form.save()
+            return redirect("add-medicine")
+        else:
+            print(form.errors)
+            form = AddMedicineForm(instance=medication_target)
+            return render(request, 'edit-medicine.html', {"form" : form})

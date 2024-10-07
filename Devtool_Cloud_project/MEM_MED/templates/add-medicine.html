@@ -8,5 +8,152 @@
 {% endblock %}
 
 {% block content %}
-<h1>test</h1>
+<div class="container">
+    <div class="container" id="greybackground">
+        <div>
+            <center>
+                <span class="badge rounded-pill text-bg-light" id="badge">
+                    <div id="textpatientname">
+                        เด็กชาย Nontakorn
+                    </div>
+                </span>
+            </center>
+        </div>
+        <br>
+        <div>
+            <div class="accordion" id="accordionExample">
+                {% for med in medication_target %}
+                    <div class="accordion-item rounded-3" >
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapse{{med.id}}" aria-expanded="false" aria-controls="collapse{{med.id}}">
+                                {{med.name}}
+                            </button>
+                        </h2>
+                        <div id="collapse{{med.id}}" class="accordion-collapse collapse"
+                            data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <center>
+                                    <img src='{{ med.image.url }}' alt="{{ med.name }}" width="96" height="96">
+                                </center>
+                                <div id="showinputrow">
+                                    <div class="row g-3 align-items-center">
+                                        <div class="col-6">
+                                            <center>
+                                                <label for="input_total_med" class="col-form-label">ยาทั้งหมด</label>
+                                            </center>
+                                        </div>
+                                        <div class="col-6">
+                                            <center>
+                                                <input type="text" id="input_total_med" class="form-control" value="{{med.dosage}}" readonly>
+                                            </center>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="showinputrow">
+                                    <div class="row g-3 align-items-center">
+                                        <div class="col-6">
+                                            <center>
+                                                <label for="input_description" class="col-form-label">คำอธิบาย</label>
+                                            </center>
+                                        </div>
+                                        <div class="col-6">
+                                            <center>
+                                                <input type="text" id="input_description" class="form-control" value="{{med.description}}" readonly>
+                                            </center>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="showinputrow">
+                                    <div class="row g-3 align-items-center">
+                                        <div class="col-6">
+                                            <center>
+                                                <label for="input_side_effects" class="col-form-label">ผลข้างเคียง</label>
+                                            </center>
+                                        </div>
+                                        <div class="col-6">
+                                            <center>
+                                                <input type="text" id="input_side_effects" class="form-control" value="{{med.side_effects}}" readonly>
+                                            </center>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row">
+                                    <div class="col">
+                                        <center>
+                                            <a class="btn btn-warning text-white" href="{% url 'edit-medicine' med.id %}">แก้ไข</a>
+                                        </center>
+                                    </div>
+                                    <div class="col">
+                                        <center>
+                                            <a class="btn btn-danger" href="{% url 'delete-medicine' med.id%}">ลบ</a>
+                                        </center>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <br>
+        <div>
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="card" id="cardcard">
+                    <div class="card-header">
+                        <div class="row" id="paddingforcardtitle">
+                            <div class="col-4">
+                                <div id="addmedtitle">เพิ่มยา</div>
+                            </div>
+                            <div class="col-4">
+
+                            </div>
+                            <div class="col-4">
+                                <button type="submit" class="btn btn-success">เพิ่ม</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="for_image" class="col-sm-2 col-form-label">Image : </label>
+                            <div class="col-sm-10" id="inputdecorate">
+                                {{form.image}}
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="input_name" class="col-sm-2 col-form-label">ชื่อของยา : </label>
+                            <div class="col-sm-10" id="inputdecorate">
+                                {{form.name}}
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="input_dosage" class="col-sm-2 col-form-label">ยาทั้งหมด : </label>
+                            <div class="col-sm-10" id="inputdecorate">
+                                {{form.dosage}}
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="input_description" class="col-sm-2 col-form-label">อธิบาย : </label>
+                            <div class="col-sm-10" id="inputdecorate">
+                                {{form.description}}
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="input_side_effects" class="col-sm-2 col-form-label">ผลข้างเคียง : </label>
+                            <div class="col-sm-10" id="inputdecorate">
+                                {{form.side_effects}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+</div>
+
+</div>
 {% endblock %}

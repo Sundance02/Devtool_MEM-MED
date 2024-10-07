@@ -19,33 +19,6 @@ html:lang(th) {
     border-radius: 60px;
 }
 
-#badge {
-    padding: 5%;
-    padding-left: 25%;
-    padding-right: 25%;
-}
-
-#textpatientname {
-    font-size: 150%;
-    font-family: "Mitr", sans-serif;
-    font-weight: 400;
-    font-style: normal;
-}
-
-.accordion-button:not(.collapsed) {
-    background-color: white; /* หรือสีที่ต้องการ เช่น #fff หรือ #f8f9fa */
-    color: black; /* เปลี่ยนสีตัวอักษรถ้าต้องการ */
-}
-
-#showinputrow {
-    padding: 2%;
-}
-
-#accordionExample {
-    border-radius: 60px !important;
-    padding: 2%;
-}
-
 #cardcard {
     border-radius: 30px;
 }
