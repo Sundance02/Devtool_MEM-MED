@@ -1,7 +1,301 @@
 {% extends 'layout.html' %}
+{% load static %}
 
 <title>{% block name %} ยาที่ต้องทานวันนี้ {% endblock %}</title>
 
+{% block mycss %}
+<style>
+    .outerdiv {
+        background: #E8E8E8;
+        margin-top: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .innerdiv {
+        background-color: white;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 15px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .status_whitebox {
+        background-color: #FF9F9F;
+        border-radius: 12px;
+        padding: 8px;
+    }
+
+
+    .status_meal {
+        background-color: #D6DCFC;
+        margin: 8px;
+        border-radius: 12px;
+
+    }
+
+
+    .accordion-button {
+        font-size: 1.1rem;
+        font-weight: bold;
+    }
+
+    .accordion-item {
+        margin-bottom: 15px;
+    }
+
+    .accordion-body {
+        font-size: 0.95rem;
+    }
+
+    .accordion-button h3 {
+        margin: 0;
+        font-size: 1.2rem;
+    }
+
+    .accordion-button .details {
+        font-size: 1rem;
+        font-weight: normal;
+        line-height: 1.5;
+
+
+    }
+
+    .checkbox-large {
+        width: 20px;
+        height: 20px;
+        transform: scale(1.5);
+        /* Increase the size by 1.5 times */
+        margin-right: 10px;
+        /* Add spacing between checkbox and label */
+    }
+</style>
+{% endblock %}
+
+
 {% block content %}
-<h1>test</h1>
+
+<div class="container-fluid outerdiv text-black col-11">
+    <!-- กล่องแรก -->
+    <div class="row innerdiv">
+        <div class="row">
+            <h5 class="col-7">17 มกราคม 2024</h5>
+            <div class="col-5 status_whitebox text-center">
+                กินยาไม่ครบ
+            </div>
+        </div>
+        <div class="row">
+            <p class="col" style="font-size: 13px;">เด็กชายโดนไก่จิกตาย บนปากโอ่ง</p>
+        </div>
+    </div>
+
+    <!-- Accordion -->
+    <div class="accordion" id="accordionExample">
+
+        <!-- ตอนเช้า + กินยาไม่ครบ-->
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne"
+                    style="background-color: #C4F0FA;">
+                    <div>
+                        <h3 style="margin-bottom: 12px; margin-left: 4px;">ตอนเช้า</h3>
+
+                        <!-- Div สีขาวขอบมนสำหรับ "จำนวนยาที่ต้องทาน : 1 เม็ด" -->
+                        <div
+                            style="background-color: white; padding: 5px 10px; border-radius: 12px; display: inline-block; margin-bottom: 5px;">
+                            จำนวนยาที่ต้องทาน : 1 เม็ด
+                        </div>
+                        <br>
+
+                        <!-- Div สีแดงขอบมนสำหรับ "สถานะ: กินยาไม่ครบ" -->
+                        <div
+                            style="background-color: #FF9F9F; padding: 5px 10px; border-radius: 12px; display: inline-block;">
+                            สถานะ: กินยาไม่ครบ
+                        </div>
+                    </div>
+                </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+
+                    <!-- card เเสดงรายละเอียดยา -->
+                    <div class="card mb-3" style="max-width: 540px;">
+                        <div class="row g-0">
+
+                            <div class="col-md-4">
+                                <img src="{% static 'images_component/bg.jpg' %}" class="img-fluid rounded-start"
+                                    alt="...">
+                            </div>
+
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <h4 class="card-title">ชื่อยา: cartoon ahh medicine</h4>
+                                    <div class="row">
+                                        <p class="card-text col-5" style="font-size: 18px;">ปริมาณ: 1 เม็ด</p>
+                                        <div class="col-7 status_meal text-center" style="font-size: 18px;">
+                                            หลังอาหารกลางวัน
+                                        </div>
+                                    </div>
+                                    <p class="card-text" style="font-size: 18px;">ผลข้างเคียง: ง่วง คลื่นใส้อาเจียน</p>
+
+                                    <input class="form-check-input checkbox-large" type="checkbox" value=""
+                                        id="flexCheckDefault">
+                                    <label class="form-check-label" for="flexCheckDefault">
+                                        <p style="font-size: 18px;">ทานยาเเล้ว</p>
+                                    </label>
+
+
+                                    <br>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+            </div>
+        </div>
+
+        <!-- ตอนกลางวัน + กินยาครบ -->
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo"
+                    style="background-color: #F4D6D6;">
+                    <div>
+                        <h3 style="margin-bottom: 12px; margin-left: 4px;">ตอนเช้า</h3>
+
+                        <!-- Div สีขาวขอบมนสำหรับ "จำนวนยาที่ต้องทาน : 1 เม็ด" -->
+                        <div
+                            style="background-color: white; padding: 5px 10px; border-radius: 12px; display: inline-block; margin-bottom: 5px;">
+                            จำนวนยาที่ต้องทาน : 1 เม็ด
+                        </div>
+                        <br>
+
+                        <!-- Div สีแดงขอบมนสำหรับ "สถานะ: กินยาไม่ครบ" -->
+                        <div
+                            style="background-color: #85FF71; padding: 5px 10px; border-radius: 12px; display: inline-block;">
+                            สถานะ: กินยาครบ
+                        </div>
+                    </div>
+                </button>
+            </h2>
+            <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+
+
+                    <!-- card เเสดงรายละเอียดยา -->
+                    <div class="card mb-3" style="max-width: 540px;">
+                        <div class="row g-0">
+
+                            <div class="col-md-4">
+                                <img src="{% static 'images_component/bg.jpg' %}" class="img-fluid rounded-start"
+                                    alt="...">
+                            </div>
+
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <h4 class="card-title">ชื่อยา: cartoon ahh medicine</h4>
+                                    <div class="row">
+                                        <p class="card-text col-5" style="font-size: 18px;">ปริมาณ: 1 เม็ด</p>
+                                        <div class="col-7 status_meal text-center" style="font-size: 18px;">
+                                            หลังอาหารกลางวัน
+                                        </div>
+                                    </div>
+                                    <p class="card-text" style="font-size: 18px;">ผลข้างเคียง: ง่วง คลื่นใส้อาเจียน</p>
+
+                                    <input class="form-check-input checkbox-large" type="checkbox" value=""
+                                        id="flexCheckDefault">
+                                    <label class="form-check-label" for="flexCheckDefault">
+                                        <p style="font-size: 18px;">ทานยาเเล้ว</p>
+                                    </label>
+
+
+                                    <br>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+        <!-- ตอนเย็น + ไม่มียาที่ต้องกิน -->
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree"
+                    style="background-color: #FEF8D8;">
+                    <div>
+                        <h3 style="margin-bottom: 12px; margin-left: 4px;">ตอนเช้า</h3>
+
+                        <!-- Div สีขาวขอบมนสำหรับ "จำนวนยาที่ต้องทาน : 1 เม็ด" -->
+                        <div
+                            style="background-color: white; padding: 5px 10px; border-radius: 12px; display: inline-block; margin-bottom: 5px;">
+                            จำนวนยาที่ต้องทาน : 1 เม็ด
+                        </div>
+                        <br>
+
+                        <!-- Div สีแดงขอบมนสำหรับ "สถานะ: กินยาไม่ครบ" -->
+                        <div
+                            style="background-color: #85FF71; padding: 5px 10px; border-radius: 12px; display: inline-block;">
+                            สถานะ: ไม่มียาที่ต้องกิน
+                        </div>
+                    </div>
+                </button>
+            </h2>
+            <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+
+
+                    <!-- card เเสดงรายละเอียดยา -->
+                    <div class="card mb-3" style="max-width: 540px;">
+                        <div class="row g-0">
+
+                            <div class="col-md-4">
+                                <img src="{% static 'images_component/bg.jpg' %}" class="img-fluid rounded-start"
+                                    alt="...">
+                            </div>
+
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <h4 class="card-title">ชื่อยา: cartoon ahh medicine</h4>
+                                    <div class="row">
+                                        <p class="card-text col-5" style="font-size: 18px;">ปริมาณ: 1 เม็ด</p>
+                                        <div class="col-7 status_meal text-center" style="font-size: 18px;">
+                                            หลังอาหารกลางวัน
+                                        </div>
+                                    </div>
+                                    <p class="card-text" style="font-size: 18px;">ผลข้างเคียง: ง่วง คลื่นใส้อาเจียน</p>
+
+                                    <input class="form-check-input checkbox-large" type="checkbox" value=""
+                                        id="flexCheckDefault">
+                                    <label class="form-check-label" for="flexCheckDefault">
+                                        <p style="font-size: 18px;">ทานยาเเล้ว</p>
+                                    </label>
+
+
+                                    <br>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
 {% endblock %}

@@ -78,8 +78,8 @@ WSGI_APPLICATION = 'Devtool_Cloud_project.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "mem_med",
-        "USER":  "postgres",
+        "NAME": "MEM_MED",
+        "USER": "postgres",
         "PASSWORD": "password",
         "HOST": "localhost",
         "PORT": "5432",
