@@ -23,10 +23,33 @@ class Medication(models.Model):
     def __str__(self):
         return self.name
 
+class Schedule(models.TextChoices):
+        MORNING = 'ตอนเช้า', 'ตอนเช้า'
+        AFTERNOON = 'ตอนกลางวัน', 'ตอนกลางวัน'
+        EVENING = 'ตอนเย็น', 'ตอนเย็น'
+        NIGHT = 'ตอนกลางคืน', 'ตอนกลางคืน'
+
+class Before_After_Meal(models.TextChoices):
+        Before = 'ก่อนอาหาร', 'ก่อนอาหาร'
+        After = 'หลังอาหาร', 'หลังอาหาร'
+
+
 class MedicationSchedule(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     medication = models.ForeignKey(Medication, on_delete=models.CASCADE)
-    time_to_take = models.TimeField()
+
+    time_to_take = models.CharField(
+        max_length=10,
+        choices=Schedule.choices
+    )
+    date_to_take = models.DateField()
+
+    before_after = models.CharField(
+        max_length=10,
+        choices=Before_After_Meal.choices
+    )
+
+    is_eaten = models.BooleanField(default=False, null=False)
     quantity = models.CharField(max_length=50)
     instructions = models.TextField(blank=True, null=True)
     date_added = models.DateField(auto_now_add=True)
@@ -39,7 +62,7 @@ class MedicationLog(models.Model):
     medication = models.ForeignKey(Medication, on_delete=models.CASCADE)
     date_taken = models.DateField()
     time_taken = models.TimeField()
-    missed = models.BooleanField(default=False)
+    missed = models.BooleanField(null=True)
     
     def __str__(self):
         return f"{self.patient.name} - {self.medication.name} on {self.date_taken}"

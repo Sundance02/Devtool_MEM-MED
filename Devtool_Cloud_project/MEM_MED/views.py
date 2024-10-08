@@ -10,14 +10,106 @@ from calendar import HTMLCalendar
 from datetime import datetime
 from django.shortcuts import render
 import calendar as cale
-
+from datetime import date
 #import จาก forms.py ด้านล่างนี้
-from MEM_MED.forms import AddMedicineForm
+from MEM_MED.forms import *
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
+
+def int_to_thai_month(month_num):
+    thai_months = [
+        "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", 
+        "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", 
+        "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"
+    ]
+    
+    if 1 <= month_num <= 12:
+        return thai_months[month_num - 1]
+    else:
+        return "เดือนไม่ถูกต้อง"
+
+
+class update_medicine_status(View):
+    def post(self, request, medicine_id):
+        
+        medicine = MedicationSchedule.objects.get(pk = medicine_id)
+        date = medicine.date_to_take
+        print(date.year)
+        is_eaten = request.POST.get('is_eaten') == 'on'  # ถ้า checkbox ถูกติ๊กจะได้ True
+        medicine.is_eaten = is_eaten
+        medicine.save()
+            
+        return redirect('medicine_sche', year=date.year, month=date.month, day = date.day)
+
 
 class daily_medicine_detail(View):
 
-    def get(self, request):
-        return render(request, 'dailymedicinedetail.html', {"form":1, "teacher":2})
+    def get(self, request, year, month, day):
+
+        date_to_take = date(year,month,day)
+        patient = Patient.objects.get(pk=1) #fix ไว้
+        medicine_sche = MedicationSchedule.objects.filter(patient = patient, date_to_take = date_to_take)
+        th_month = int_to_thai_month(month) 
+        
+        form = MedicationScheduleForm()
+
+        #สถานะทานยาโดยรวม
+        all_status = True
+        for medicine in medicine_sche:
+            if medicine.is_eaten is False: 
+                all_status = False
+                break
+        if(not medicine_sche):
+            all_status = 2
+
+        #ทานยาเช้า
+        medicine_morning = MedicationSchedule.objects.filter(patient = patient, date_to_take = date_to_take, time_to_take = 'ตอนเช้า')
+        morning_status = True
+        for medicine in medicine_morning:
+            if medicine.is_eaten is False: 
+                morning_status = False
+                break
+        if(not medicine_morning):
+            morning_status = 2
+        
+
+        #ทานยากลางวัน
+        medicine_noon = MedicationSchedule.objects.filter(patient = patient, date_to_take = date_to_take, time_to_take = 'ตอนกลางวัน')
+        noon_status = True
+        for medicine in medicine_noon:
+            if medicine.is_eaten is False: 
+                noon_status = False
+                break
+        if(not medicine_noon):
+            noon_status = 2
+
+        #ทานยาเย็น
+        medicine_eve = MedicationSchedule.objects.filter(patient = patient, date_to_take = date_to_take, time_to_take = 'ตอนเย็น')
+        eve_status = True
+        for medicine in medicine_eve:
+            if medicine.is_eaten is False: 
+                eve_status = False
+                break
+        if(not medicine_eve):
+            eve_status = 2
+        
+        #ทานยาตอนกลางคืน
+        medicine_night = MedicationSchedule.objects.filter(patient = patient, date_to_take = date_to_take, time_to_take = 'ตอนกลางคืน')
+        night_status = True
+        for medicine in medicine_night:
+            if medicine.is_eaten is False: 
+                night_status = False
+                break
+        if(not medicine_night):
+            night_status = 2
+
+
+        context = {"patient":patient, "medicine_totake":medicine_sche, "th_month":th_month, 'day':day, "year":year, "all_status":all_status,
+                    "morning_status":morning_status, "noon_status":noon_status, "eve_status":eve_status, "night_status":night_status,
+                    "medicine_morning":medicine_morning, "medicine_noon":medicine_noon, "medicine_eve":medicine_eve, "medicine_night":medicine_night,
+                    "form":form}
+        return render(request, 'dailymedicinedetail.html', context)
 
 
 class calendar(View):
@@ -71,6 +163,19 @@ class calendar(View):
 
 def day_view(request, year, month, day):
     return HttpResponse(f"You clicked on {day}/{month}/{year}")
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 class MedicineAddView(View):
     def get(self, request):

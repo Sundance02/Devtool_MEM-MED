@@ -24,3 +24,13 @@ class AddMedicineForm(ModelForm):
                   "description",
                   "side_effects",
                 ]
+        
+
+class MedicationScheduleForm(forms.ModelForm):
+    class Meta:
+        model = MedicationSchedule
+        fields = ['is_eaten']
+
+    def __init__(self, *args, **kwargs):
+        super(MedicationScheduleForm, self).__init__(*args, **kwargs)
+        self.fields['is_eaten'].widget = forms.HiddenInput()    

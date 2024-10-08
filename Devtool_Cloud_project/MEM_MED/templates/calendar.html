@@ -67,7 +67,7 @@
                 <td
                     class="{% if day in log_dates %}highlight{% elif day in log_dates_missed %}highlight_missed{% elif day in log_dates_not_missed %}highlight_not_missed{% endif %}">
                     {% if day != 0 %}
-                    <a href="{% url 'day_view' year=year month=month day=day %}">{{ day }}</a>
+                    <a href="{% url 'medicine_sche' year=year month=month day=day %}">{{ day }}</a>
                     {% else %}
                     &nbsp;
                     {% endif %}
