@@ -5,3 +5,6 @@ myvenv/
 # Ignore other files/folders
 *.pyc
 __pycache__/
+
+# ignore settings
+/Devtool_Cloud_project/Devtool_Cloud_project/settings.py
