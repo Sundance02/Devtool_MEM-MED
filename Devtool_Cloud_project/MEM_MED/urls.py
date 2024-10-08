@@ -9,4 +9,5 @@ urlpatterns = [
     path("medicine/add/", views.MedicineAddView.as_view(), name="add-medicine"),
     path("medicine/edit/<int:pk>/", views.MedicineEditView.as_view(), name="edit-medicine"),
     path("medicine/delete/<int:pk>/", views.MedicineDeleteView.as_view(), name="delete-medicine"),
+    path("daily-medicine/add/", views.DailyMedicineAddView.as_view(), name="add-daily-medicine"),
 ]

@@ -12,7 +12,7 @@ from django.shortcuts import render
 import calendar as cale
 
 #import จาก forms.py ด้านล่างนี้
-from MEM_MED.forms import AddMedicineForm
+from MEM_MED.forms import AddMedicineForm, AddDailyMedicineForm
 
 class daily_medicine_detail(View):
 
@@ -116,3 +116,21 @@ class MedicineEditView(View):
             print(form.errors)
             form = AddMedicineForm(instance=medication_target)
             return render(request, 'edit-medicine.html', {"form" : form})
+
+class DailyMedicineAddView(View):
+    def get(self, request):
+
+        medication_schedule_target = MedicationSchedule.objects.all()
+        form = AddDailyMedicineForm()
+        return render(request, 'add-daily-medicine.html', {"medication_schedule_target" : medication_schedule_target, "form" : form})
+    
+    def post(self, request):
+
+        medication_schedule_target = MedicationSchedule.objects.all()
+        form = AddDailyMedicineForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            form.save()
+            return redirect("add-daily-medicine")
+        else:
+            return render(request, 'add-daily-medicine.html', {"medication_schedule_target" : medication_schedule_target, "form" : form})
