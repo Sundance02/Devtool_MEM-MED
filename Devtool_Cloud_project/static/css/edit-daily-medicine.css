@@ -1,0 +1,66 @@
+* {
+    box-sizing: border-box;
+    font-family: "Nunito", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+
+html:lang(th) {
+    font-family: "Mitr", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+#greybackground {
+    background-color: #E8E8E8;
+    padding : 5%;
+    margin-top: 5%;
+    border-radius: 60px;
+}
+
+#cardcard {
+    border-radius: 30px;
+}
+
+#addmedtitle {
+    padding: 2%;
+    font-size: 150%;
+    font-family: "Mitr", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+#id_patient, #id_date_to_take, #id_medication, #id_before_after, #id_quantity, #id_time_to_take {
+    border-radius: 30px;
+    background-color:#0000004c;
+    border: transparent;
+    font-family: "Mitr", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+    padding: 3%;
+    text-align: center;
+}
+
+#id_instructions {
+    border-radius: 30px;
+    background-color:#0000004c;
+    border: transparent;
+    font-family: "Mitr", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+    width: 90%;
+    height: 150px;
+    padding: 5%;
+}
+
+#paddingforcardtitle {
+    padding: 3%;
+}
+
+#labeltextfonts {
+    font-size: 100%;
+    font-family: "Mitr", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}

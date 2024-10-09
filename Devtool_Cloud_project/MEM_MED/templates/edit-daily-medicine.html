@@ -1,0 +1,99 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block title %}แก้ไขยา{% endblock %}
+
+{% block mycss %}
+<link rel="stylesheet" href="{% static 'css/edit-daily-medicine.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="container" id="greybackground">
+        <div>
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="card" id="cardcard">
+                    <div class="card-header">
+                        <div class="row" id="paddingforcardtitle">
+                            <div class="col-8">
+                                <div id="addmedtitle">แก้ไขยาประจำวัน</div>
+                            </div>
+                            <div class="col-1">
+
+                            </div>
+                            <div class="col-3">
+                                <center>
+                                    <button type="submit" class="btn btn-warning text-white">แก้ไข</button>
+                                </center>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row g-3 align-items-center">
+                            <div class="col-6">
+                                <center>
+                                    <label for="for_patient" class="col-sm-2 col-form-label" id="labeltextfonts">เลือกคนไข้ : </label>
+                                </center>
+                            </div>
+                            <div class="col-6">
+                                <center>
+                                    {{form.patient}}
+                                </center>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row g-3 align-items-center">
+                            <div class="col-6">
+                                <center>
+                                    <label for="for_patient" class="col-sm-2 col-form-label" id="labeltextfonts">เลือกวันที่ : </label>
+                                </center>
+                            </div>
+                            <div class="col-6">
+                                <center>
+                                    {{form.date_to_take}}
+                                </center>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="for_medication" class="col-sm-2 col-form-label" id="labeltextfonts">เลือกยาที่จะทาน : </label>
+                            <div class="col-sm-10" id="inputdecorate">
+                                {{form.medication}}
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="input_before_after" class="col-sm-2 col-form-label" id="labeltextfonts">เวลาที่ต้องทาน : </label>
+                            <div class="col-sm-10" id="inputdecorate">
+                                {{form.before_after}}
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="input_quantity" class="col-sm-2 col-form-label" id="labeltextfonts">ปริมาณที่ต้องทาน : </label>
+                            <div class="col-sm-10" id="inputdecorate">
+                                {{form.quantity}}
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="input_instructions" class="col-sm-2 col-form-label" id="labeltextfonts">คำแนะนำ : </label>
+                            <div class="col-sm-10" id="inputdecorate">
+                                {{form.instructions}}
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="input_time_to_take" class="col-sm-2 col-form-label" id="labeltextfonts">ช่วงที่ต้องทาน : </label>
+                            <div class="col-sm-10" id="inputdecorate">
+                                {{form.time_to_take}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+</div>
+
+</div>
+{% endblock %}

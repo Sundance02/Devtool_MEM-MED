@@ -164,18 +164,12 @@ class calendar(View):
 def day_view(request, year, month, day):
     return HttpResponse(f"You clicked on {day}/{month}/{year}")
 
+class PatientListView(View):
 
+    def get(self, request):
 
-
-
-
-
-
-
-
-
-
-
+        patient_list_target = Patient.objects.all()
+        return render(request, 'patient-list.html', {"patient_list_target" : patient_list_target})
 
 class MedicineAddView(View):
     def get(self, request):
@@ -249,3 +243,48 @@ class PatientView(View):
         return render(request, 'Patient.html', context)
 
         
+
+class DailyMedicineAddView(View):
+    def get(self, request):
+
+        medication_schedule_target = MedicationSchedule.objects.all()
+        form = AddDailyMedicineForm()
+        return render(request, 'add-daily-medicine.html', {"medication_schedule_target" : medication_schedule_target, "form" : form})
+    
+    def post(self, request):
+
+        medication_schedule_target = MedicationSchedule.objects.all()
+        form = AddDailyMedicineForm(request.POST)
+
+        if form.is_valid():
+            form.save()
+            return redirect("add-daily-medicine")
+        else:
+            return render(request, 'add-daily-medicine.html', {"medication_schedule_target" : medication_schedule_target, "form" : form})
+
+class DailyMedicineDeleteView(View):
+
+    def get(self, request, pk):
+        medication_schedule_target = MedicationSchedule.objects.get(pk=pk)
+        medication_schedule_target.delete()
+        return redirect('add-daily-medicine')
+
+class DailyMedicineEditView(View):
+
+    def get(self, request, pk):
+        medication_schedule_target = MedicationSchedule.objects.get(pk=pk)
+        form = AddDailyMedicineForm(instance=medication_schedule_target)
+        return render(request, 'edit-daily-medicine.html', {"form" : form})
+
+    def post(self, request, pk):
+
+        medication_schedule_target = MedicationSchedule.objects.get(pk=pk)
+        form = AddDailyMedicineForm(request.POST, instance=medication_schedule_target)
+
+        if form.is_valid():
+            form.save()
+            return redirect("add-daily-medicine")
+        else:
+            print(form.errors)
+            form = AddDailyMedicineForm(instance=medication_schedule_target)
+            return render(request, 'edit-daily-medicine.html', {"form" : form})

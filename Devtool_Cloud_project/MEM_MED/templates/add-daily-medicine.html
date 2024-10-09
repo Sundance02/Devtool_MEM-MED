@@ -1,0 +1,223 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block title %}เพิ่มยาประจำวัน{% endblock %}
+
+{% block mycss %}
+<link rel="stylesheet" href="{% static 'css/add-daily-medicine.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="container" id="greybackground">
+        <div>
+            <center>
+                <span class="badge rounded-pill text-bg-light" id="badge">
+                    <div id="textpatientname">
+                        การแจกจ่ายยาวันนี้
+                    </div>
+                </span>
+            </center>
+        </div>
+        <br>
+        <div>
+            <div class="accordion" id="accordionExample">
+                {% for med in medication_schedule_target %}
+                    <div class="accordion-item rounded-3" >
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapse{{med.id}}" aria-expanded="false" aria-controls="collapse{{med.id}}">
+                                <div class="row">
+                                    <div class="col-6" id="labeltextfonts">
+                                        <center>
+                                            {{med.patient.user.first_name}} {{med.patient.user.last_name}}
+                                        </center>
+                                    </div>
+                                    <div class="col-6" id="labeltextfonts">
+                                        <center>
+                                            {{med.date_to_take | date:"d/M/y"}}
+                                        </center>
+                                    </div>
+                                </div>
+                            </button>
+                        </h2>
+                        <div id="collapse{{med.id}}" class="accordion-collapse collapse"
+                            data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <div id="showinputrow">
+                                    <div class="row g-3 align-items-center">
+                                        <div class="col-6">
+                                            <center>
+                                                <label for="input_medication" class="col-form-label" id="labeltextfonts">ยา : </label>
+                                            </center>
+                                        </div>
+                                        <div class="col-6">
+                                            <center>
+                                                <input type="text" id="input_medication" class="form-control" value="{{med.medication}}" readonly>
+                                            </center>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="showinputrow">
+                                    <div class="row g-3 align-items-center">
+                                        <div class="col-6">
+                                            <center>
+                                                <label for="input_time_to_take" class="col-form-label" id="labeltextfonts">เวลาที่ต้องทาน : </label>
+                                            </center>
+                                        </div>
+                                        <div class="col-6">
+                                            <center>
+                                                <input type="text" id="input_time_to_take" class="form-control" value="{{med.time_to_take}}" readonly>
+                                            </center>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="showinputrow">
+                                    <div class="row g-3 align-items-center">
+                                        <div class="col-6">
+                                            <center>
+                                                <label for="input_before_after" class="col-form-label" id="labeltextfonts">ช่วงที่ต้องทาน : </label>
+                                            </center>
+                                        </div>
+                                        <div class="col-6">
+                                            <center>
+                                                <input type="text" id="input_before_after" class="form-control" value="{{med.before_after}}" readonly>
+                                            </center>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="showinputrow">
+                                    <div class="row g-3 align-items-center">
+                                        <div class="col-6">
+                                            <center>
+                                                <label for="input_quantity" class="col-form-label" id="labeltextfonts">ปริมาณที่ต้องทาน : </label>
+                                            </center>
+                                        </div>
+                                        <div class="col-6">
+                                            <center>
+                                                <input type="text" id="input_quantity" class="form-control" value="{{med.quantity}}" readonly>
+                                            </center>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="showinputrow">
+                                    <div class="row g-3 align-items-center">
+                                        <div class="col-6">
+                                            <center>
+                                                <label for="input_instructions" class="col-form-label" id="labeltextfonts">คำแนะนำ : </label>
+                                            </center>
+                                        </div>
+                                        <div class="col-6">
+                                            <center>
+                                                <input type="text" id="input_instructions" class="form-control" value="{{med.instructions}}" readonly>
+                                            </center>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row">
+                                    <div class="col">
+                                        <center>
+                                            <a class="btn btn-warning text-white" href="{% url 'edit-daily-medicine' med.id %}">แก้ไข</a>
+                                        </center>
+                                    </div>
+                                    <div class="col">
+                                        <center>
+                                            <a class="btn btn-danger" href="{% url 'delete-daily-medicine' med.id%}">ลบ</a>
+                                        </center>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <br>
+        <div>
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="card" id="cardcard">
+                    <div class="card-header">
+                        <div class="row" id="paddingforcardtitle">
+                            <div class="col-7">
+                                <div id="addmedtitle">เพิ่มยาที่ต้องทาน</div>
+                            </div>
+                            <div class="col-2">
+
+                            </div>
+                            <div class="col-3">
+                                <center>
+                                    <button type="submit" class="btn btn-success">เพิ่ม</button>
+                                </center>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row g-3 align-items-center">
+                            <div class="col-6">
+                                <center>
+                                    <label for="for_patient" class="col-sm-2 col-form-label" id="labeltextfonts">เลือกคนไข้ : </label>
+                                </center>
+                            </div>
+                            <div class="col-6">
+                                <center>
+                                    {{form.patient}}
+                                </center>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row g-3 align-items-center">
+                            <div class="col-6">
+                                <center>
+                                    <label for="for_patient" class="col-sm-2 col-form-label" id="labeltextfonts">เลือกวันที่ : </label>
+                                </center>
+                            </div>
+                            <div class="col-6">
+                                <center>
+                                    {{form.date_to_take}}
+                                </center>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="for_medication" class="col-sm-2 col-form-label" id="labeltextfonts">เลือกยาที่จะทาน : </label>
+                            <div class="col-sm-10" id="inputdecorate">
+                                {{form.medication}}
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="input_before_after" class="col-sm-2 col-form-label" id="labeltextfonts">เวลาที่ต้องทาน : </label>
+                            <div class="col-sm-10" id="inputdecorate">
+                                {{form.before_after}}
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="input_quantity" class="col-sm-2 col-form-label" id="labeltextfonts">ปริมาณที่ต้องทาน : </label>
+                            <div class="col-sm-10" id="inputdecorate">
+                                {{form.quantity}}
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="input_instructions" class="col-sm-2 col-form-label" id="labeltextfonts">คำแนะนำ : </label>
+                            <div class="col-sm-10" id="inputdecorate">
+                                {{form.instructions}}
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="input_time_to_take" class="col-sm-2 col-form-label" id="labeltextfonts">ช่วงที่ต้องทาน : </label>
+                            <div class="col-sm-10" id="inputdecorate">
+                                {{form.time_to_take}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+</div>
+
+</div>
+{% endblock %}
