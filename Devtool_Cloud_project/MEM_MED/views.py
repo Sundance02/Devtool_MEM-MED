@@ -146,6 +146,8 @@ class calendar(View):
         else:
             next_month = month + 1
             next_year = year
+        
+        patient = Patient.objects.get(user = request.user)
 
         return render(request, 'calendar.html', {
             'month_days': month_days,
@@ -158,7 +160,8 @@ class calendar(View):
             'next_month': next_month,
             'log_dates': log_dates, 
             'log_dates_missed': log_dates_missed,
-            'log_dates_not_missed': log_dates_not_missed
+            'log_dates_not_missed': log_dates_not_missed,
+            'patient': patient
         })
 
 def day_view(request, year, month, day):
