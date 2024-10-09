@@ -3,12 +3,11 @@ from .models import *
 from django.views import View
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from django.forms import ModelForm, PasswordInput, SplitDateTimeField
+from django.forms import ModelForm, SplitDateTimeField
 from django.forms.widgets import Textarea, TextInput, SplitDateTimeWidget
 from django.core.exceptions import ValidationError
 from datetime import datetime, timezone
 from django.db import transaction
-from django.contrib.auth.forms import *
 
 from django.db import models
 from django import forms
@@ -49,16 +48,4 @@ class MedicationScheduleForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(MedicationScheduleForm, self).__init__(*args, **kwargs)
-        self.fields['is_eaten'].widget = forms.HiddenInput()
-
-
-class Loginform(AuthenticationForm):
-    username = forms.CharField(widget=TextInput(attrs={"class":"block bg-white w-full border border-slate-300 rounded-md w-[350px] py-2 px-4", "placeholder":"ชื่อผู้ใช้..." }))
-    password = forms.CharField(widget=PasswordInput(attrs={"class":"block bg-white w-full border border-slate-300 rounded-md w-[350px] py-2 px-4", "placeholder":"รหัสผ่าน..."}))
-
-    class Meta:
-        model = User
-        fields = [
-            "username",
-            "password"
-        ]
+        self.fields['is_eaten'].widget = forms.HiddenInput()    
