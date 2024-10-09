@@ -164,6 +164,13 @@ class calendar(View):
 def day_view(request, year, month, day):
     return HttpResponse(f"You clicked on {day}/{month}/{year}")
 
+class PatientListView(View):
+
+    def get(self, request):
+
+        patient_list_target = Patient.objects.all()
+        return render(request, 'patient-list.html', {"patient_list_target" : patient_list_target})
+
 class MedicineAddView(View):
     def get(self, request):
 
