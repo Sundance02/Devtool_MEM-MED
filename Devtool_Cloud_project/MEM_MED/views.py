@@ -221,3 +221,31 @@ class MedicineEditView(View):
             print(form.errors)
             form = AddMedicineForm(instance=medication_target)
             return render(request, 'edit-medicine.html', {"form" : form})
+        
+
+class PatientView(View):
+
+    def get(self, request, pk):
+        patient_target = Patient.objects.get(pk=pk)
+        
+        # ฟังก์ชันคำนวณอายุ
+        def calculate_age(birthdate):
+            today = datetime.today()
+            age = today.year - birthdate.year - ((today.month, today.day) < (birthdate.month, birthdate.day))
+            return age
+
+        # คำนวณอายุ
+        age = calculate_age(patient_target.birthdate)
+
+        medicationschedule = MedicationSchedule.objects.filter(patient = patient_target)
+        
+        # เพิ่มอายุใน context
+        context = {
+            "patient_target": patient_target,
+            "age": age,
+            "medicationschedule": medicationschedule
+        }
+
+        return render(request, 'Patient.html', context)
+
+        
