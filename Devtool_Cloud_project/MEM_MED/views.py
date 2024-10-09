@@ -17,6 +17,8 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.contrib.auth import logout, login
+from django.contrib.auth.forms import AuthenticationForm
+
 
 class Login(View):
     def get(self, request):
