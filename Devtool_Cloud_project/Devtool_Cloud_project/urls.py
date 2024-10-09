@@ -17,6 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from MEM_MED import urls
+from MEM_MED.views import *
 
 from django.conf.urls.static import static
 from django.conf import settings
@@ -24,4 +25,5 @@ from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("mem_med/", include("MEM_MED.urls")),
+    path('Login/', Login.as_view(), name='login')
 ]  + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

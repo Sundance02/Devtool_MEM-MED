@@ -16,6 +16,21 @@ from MEM_MED.forms import *
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
+from django.contrib.auth import logout, login
+
+class Login(View):
+    def get(self, request):
+        form = AuthenticationForm()
+        return render(request, 'login.html', {"form": form})
+    
+    def post(self, request):
+        form = AuthenticationForm(data=request.POST)
+        if form.is_valid():
+            user = form.get_user() 
+            login(request,user)
+            return redirect('calendar')  
+
+        return render(request,'login.html', {"form":form})
 
 def int_to_thai_month(month_num):
     thai_months = [
@@ -115,7 +130,8 @@ class daily_medicine_detail(View):
 class calendar(View):
     
     def get(self, request, year=None, month=None):
-        log = MedicationLog.objects.all()
+        patient = Patient.objects.get(user = request.user)
+        log = MedicationLog.objects.filter(patient = patient)
 
         if year is None or month is None:
             now = datetime.now()
@@ -147,7 +163,7 @@ class calendar(View):
             next_month = month + 1
             next_year = year
         
-        patient = Patient.objects.get(user = request.user)
+        patient_age = year-patient.birthdate.year
 
         return render(request, 'calendar.html', {
             'month_days': month_days,
@@ -161,7 +177,8 @@ class calendar(View):
             'log_dates': log_dates, 
             'log_dates_missed': log_dates_missed,
             'log_dates_not_missed': log_dates_not_missed,
-            'patient': patient
+            'patient': patient,
+            'patient_age': patient_age
         })
 
 def day_view(request, year, month, day):

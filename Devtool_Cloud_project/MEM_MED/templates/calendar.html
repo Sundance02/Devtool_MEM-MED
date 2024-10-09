@@ -83,18 +83,11 @@
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="patient-card">
-                <div class="text-center">
-                    <div class="text-left d-flex align-items-center" style="background-color: rgb(233, 233, 233); padding: 10px; border-radius: 10px;">
-                        <img src="https://via.placeholder.com/80" class="rounded-circle me-2" alt="Profile Picture">
-                        <p style="font-size: 90%;">{{user.first_name}} {{user.last_name}} <br> <strong>วันเกิด:</strong>{{patient.birthdate}}</p>
-                    </div>
-                    
-                </div>
-                <br>
-                <p><strong>อายุ:</strong> 99&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>เพศ:</strong> ชาย</p>
-                <p><strong>ยาที่แพ้:</strong> Penicillin</p>
-                <p><strong>โรคประจำตัว:</strong> ไม่มี</p>
-                <p><strong>เบอร์ติดต่อ:</strong> 087-XXXX-XXX</p>
+                <p style="font-size: 90%;"><strong>ชื่อ: </strong>{{user.first_name}} {{user.last_name}}</p>
+                <p><strong>วันเกิด: </strong> {{patient.birthdate}}</p>
+                <p><strong>อายุ:</strong> {{patient_age}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>เพศ:</strong> ชาย</p>
+                <p><strong>ยาที่แพ้:</strong> {{patient.medical_history}}</p>
+                <p><strong>โรคประจำตัว:</strong> {{patient.allergies}}</p>
 
             </div>
         </div>
