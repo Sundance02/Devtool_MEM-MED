@@ -25,5 +25,6 @@ from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("mem_med/", include("MEM_MED.urls")),
-    path('Login/', Login.as_view(), name='login')
+    path('login/', Login.as_view(), name='login'),
+    path('register/', RegisterView.as_view(), name='register')
 ]  + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

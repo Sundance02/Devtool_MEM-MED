@@ -18,6 +18,7 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from django.contrib.auth import logout, login
 from django.contrib.auth.forms import AuthenticationForm
+from django.views.generic import FormView
 
 
 class Login(View):
@@ -33,6 +34,35 @@ class Login(View):
             return redirect('calendar')  
 
         return render(request,'login.html', {"form":form})
+
+class RegisterView(FormView):
+
+    def get(self, request):
+        form = RegisterForm()
+        #   # เปลี่ยนเส้นทางไปที่หน้า Login หลังจากสมัครเสร็จ
+        return render(request, 'register.html', {"form": form})
+    
+    def post(self, request):
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            birthdate = form.cleaned_data['birthdate']
+            allergies = form.cleaned_data['allergies']
+            medical_history = form.cleaned_data['medical_history']
+            first_name = form.cleaned_data['first_name']
+            last_name = form.cleaned_data['last_name']
+
+            patient = Patient.objects.create(
+                user=user,
+                birthdate=birthdate,
+                allergies=allergies,
+                medical_history=medical_history,
+                name=first_name + last_name
+            )
+            patient.save()
+
+            return redirect('login')
+        return render(request, 'register.html', {"form": form})
 
 def int_to_thai_month(month_num):
     thai_months = [
