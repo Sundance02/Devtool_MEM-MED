@@ -25,33 +25,32 @@ class Medication(models.Model):
     def __str__(self):
         return self.name
 
+class Schedule(models.TextChoices):
+        MORNING = 'ตอนเช้า', 'ตอนเช้า'
+        AFTERNOON = 'ตอนกลางวัน', 'ตอนกลางวัน'
+        EVENING = 'ตอนเย็น', 'ตอนเย็น'
+        NIGHT = 'ตอนกลางคืน', 'ตอนกลางคืน'
+
+class Before_After_Meal(models.TextChoices):
+        Before = 'ก่อนอาหาร', 'ก่อนอาหาร'
+        After = 'หลังอาหาร', 'หลังอาหาร'
+
+
 class MedicationSchedule(models.Model):
-
-    SCHEDULE_CHOICES = [
-        ('ตอนเช้า', 'ตอนเช้า'),
-        ('ตอนกลางวัน', 'ตอนกลางวัน'),
-        ('ตอนเย็น', 'ตอนเย็น'),
-        ('ตอนกลางคืน', 'ตอนกลางคืน')
-    ]
-
-    BEFORE_AFTER_MEAL_CHOICES = [
-        ('ก่อนอาหาร', 'ก่อนอาหาร'),
-        ('หลังอาหาร', 'หลังอาหาร')
-    ]
 
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     medication = models.ForeignKey(Medication, on_delete=models.CASCADE)
 
     time_to_take = models.CharField(
         max_length = 10,
-        choices = SCHEDULE_CHOICES
+        choices = Schedule.choices
     )
 
     date_to_take = models.DateField()
 
     before_after = models.CharField(
         max_length = 10,
-        choices = BEFORE_AFTER_MEAL_CHOICES
+        choices = Before_After_Meal.choices
     )
 
     is_eaten = models.BooleanField(default=False, null=False)
@@ -68,7 +67,7 @@ class MedicationLog(models.Model):
     medication = models.ForeignKey(Medication, on_delete=models.CASCADE)
     date_taken = models.DateField()
     time_taken = models.TimeField()
-    missed = models.BooleanField(default=False)
+    missed = models.BooleanField(default=False, null=True)
 
     def __str__(self):
         return f"{self.patient.name} - {self.medication.name} on {self.date_taken}"

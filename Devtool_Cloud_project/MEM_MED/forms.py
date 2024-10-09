@@ -32,7 +32,20 @@ class AddDailyMedicineForm(ModelForm):
         fields = ["patient",
                   "medication",
                   "time_to_take",
+                  "date_to_take",
                   "before_after",
                   "is_eaten",
                   "quantity",
                   "instructions"]
+        widgets = {
+            'date_to_take': forms.DateInput(attrs={'type': 'date'}),
+        }
+
+class MedicationScheduleForm(forms.ModelForm):
+    class Meta:
+        model = MedicationSchedule
+        fields = ['is_eaten']
+
+    def __init__(self, *args, **kwargs):
+        super(MedicationScheduleForm, self).__init__(*args, **kwargs)
+        self.fields['is_eaten'].widget = forms.HiddenInput()    

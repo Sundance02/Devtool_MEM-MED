@@ -79,13 +79,24 @@
     <!-- กล่องแรก -->
     <div class="row innerdiv">
         <div class="row">
-            <h5 class="col-7">17 มกราคม 2024</h5>
+            <h5 class="col-7">{{day}} {{th_month}} {{year}}</h5>
+            {% if all_status == False%}
             <div class="col-5 status_whitebox text-center">
-                กินยาไม่ครบ
+                ทานยาไม่ครบ
             </div>
+            {% elif all_status == True %}
+            <div class="col-5 status_whitebox text-center" style="background-color: #85FF71;">
+                ทานยาครบ
+            </div>
+            {% else %}
+            <div class="col-5 status_whitebox text-center" style="background-color: #85FF71;">
+                ไม่มียาที่ต้องทาน
+            </div>
+            {% endif %}
+
         </div>
         <div class="row">
-            <p class="col" style="font-size: 13px;">เด็กชายโดนไก่จิกตาย บนปากโอ่ง</p>
+            <p class="col" style="font-size: 18px;">{{patient.name}}</p>
         </div>
     </div>
 
@@ -102,24 +113,34 @@
                         <h3 style="margin-bottom: 12px; margin-left: 4px;">ตอนเช้า</h3>
 
                         <!-- Div สีขาวขอบมนสำหรับ "จำนวนยาที่ต้องทาน : 1 เม็ด" -->
-                        <div
-                            style="background-color: white; padding: 5px 10px; border-radius: 12px; display: inline-block; margin-bottom: 5px;">
-                            จำนวนยาที่ต้องทาน : 1 เม็ด
-                        </div>
+
                         <br>
 
-                        <!-- Div สีแดงขอบมนสำหรับ "สถานะ: กินยาไม่ครบ" -->
+                        {% if morning_status == False %}
                         <div
                             style="background-color: #FF9F9F; padding: 5px 10px; border-radius: 12px; display: inline-block;">
-                            สถานะ: กินยาไม่ครบ
+                            สถานะ: ทานยาไม่ครบ
                         </div>
+                        {% elif morning_status == True %}
+                        <div
+                            style="background-color: #85FF71; padding: 5px 10px; border-radius: 12px; display: inline-block;">
+                            สถานะ: ทานยาครบ
+                        </div>
+                        {% elif morning_status == 2 %}
+                        <div
+                            style="background-color: #85FF71; padding: 5px 10px; border-radius: 12px; display: inline-block;">
+                            สถานะ: ไม่มียาที่ต้องทาน
+                        </div>
+                        {% endif %}
                     </div>
                 </button>
             </h2>
             <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
                 <div class="accordion-body">
 
+
                     <!-- card เเสดงรายละเอียดยา -->
+                    {% for medicine in medicine_morning %}
                     <div class="card mb-3" style="max-width: 540px;">
                         <div class="row g-0">
 
@@ -130,20 +151,29 @@
 
                             <div class="col-md-8">
                                 <div class="card-body">
-                                    <h4 class="card-title">ชื่อยา: cartoon ahh medicine</h4>
+                                    <h4 class="card-title">{{medicine.medication.name}}</h4>
                                     <div class="row">
-                                        <p class="card-text col-5" style="font-size: 18px;">ปริมาณ: 1 เม็ด</p>
-                                        <div class="col-7 status_meal text-center" style="font-size: 18px;">
-                                            หลังอาหารกลางวัน
+                                        <p class="card-text col-6" style="font-size: 18px;">ปริมาณ:
+                                            {{medicine.quantity}}</p>
+                                        <div class="col-6 status_meal text-center" style="font-size: 18px;">
+                                            {{medicine.before_after}}
                                         </div>
                                     </div>
-                                    <p class="card-text" style="font-size: 18px;">ผลข้างเคียง: ง่วง คลื่นใส้อาเจียน</p>
+                                    <p class="card-text" style="font-size: 18px;">{{medicine.medication.side_effects}}
+                                    </p>
 
-                                    <input class="form-check-input checkbox-large" type="checkbox" value=""
-                                        id="flexCheckDefault">
-                                    <label class="form-check-label" for="flexCheckDefault">
-                                        <p style="font-size: 18px;">ทานยาเเล้ว</p>
-                                    </label>
+                                    <form method="post" action="{% url 'update_status' medicine.id %}">
+                                        {% csrf_token %}
+                                        
+                                        <input class="form-check-input checkbox-large" type="checkbox"
+                                            id="check{{medicine.id}}" {% if medicine.is_eaten %} checked {% endif %} 
+                                            name = "is_eaten">                                       
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            <p style="font-size: 18px;">ทานยาเเล้ว</p>
+                                        </label>
+                                        <br>
+                                        <button type="submit" class="btn btn-success" >บันทึกสถานะการทานยา </button>
+                                    </form>
 
 
                                     <br>
@@ -152,6 +182,8 @@
 
                         </div>
                     </div>
+                    {% endfor %}
+
 
 
 
@@ -167,20 +199,30 @@
                     data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo"
                     style="background-color: #F4D6D6;">
                     <div>
-                        <h3 style="margin-bottom: 12px; margin-left: 4px;">ตอนเช้า</h3>
+                        <h3 style="margin-bottom: 12px; margin-left: 4px;">ตอนกลางวัน</h3>
 
                         <!-- Div สีขาวขอบมนสำหรับ "จำนวนยาที่ต้องทาน : 1 เม็ด" -->
-                        <div
-                            style="background-color: white; padding: 5px 10px; border-radius: 12px; display: inline-block; margin-bottom: 5px;">
-                            จำนวนยาที่ต้องทาน : 1 เม็ด
-                        </div>
                         <br>
 
-                        <!-- Div สีแดงขอบมนสำหรับ "สถานะ: กินยาไม่ครบ" -->
+                        <!-- สถานะทานยา -->
+                        {% if noon_status == False %}
+                        <div
+                            style="background-color: #FF9F9F; padding: 5px 10px; border-radius: 12px; display: inline-block;">
+                            สถานะ: ทานยาไม่ครบ
+                        </div>
+                        {% elif noon_status == True %}
                         <div
                             style="background-color: #85FF71; padding: 5px 10px; border-radius: 12px; display: inline-block;">
-                            สถานะ: กินยาครบ
+                            สถานะ: ทานยาครบ
                         </div>
+                        {% elif noon_status == 2 %}
+                        <div
+                            style="background-color: #85FF71; padding: 5px 10px; border-radius: 12px; display: inline-block;">
+                            สถานะ: ไม่มียาที่ต้องทาน
+                        </div>
+                        {% endif %}
+
+
                     </div>
                 </button>
             </h2>
@@ -189,6 +231,7 @@
 
 
                     <!-- card เเสดงรายละเอียดยา -->
+                    {% for medicine in medicine_noon %}
                     <div class="card mb-3" style="max-width: 540px;">
                         <div class="row g-0">
 
@@ -199,20 +242,28 @@
 
                             <div class="col-md-8">
                                 <div class="card-body">
-                                    <h4 class="card-title">ชื่อยา: cartoon ahh medicine</h4>
+                                    <h4 class="card-title">{{medicine.medication.name}}</h4>
                                     <div class="row">
-                                        <p class="card-text col-5" style="font-size: 18px;">ปริมาณ: 1 เม็ด</p>
-                                        <div class="col-7 status_meal text-center" style="font-size: 18px;">
-                                            หลังอาหารกลางวัน
+                                        <p class="card-text col-6" style="font-size: 18px;">ปริมาณ:{{medicine.quantity}}</p>
+                                        <div class="col-6 status_meal text-center" style="font-size: 18px;">
+                                            {{medicine.before_after}}
                                         </div>
                                     </div>
-                                    <p class="card-text" style="font-size: 18px;">ผลข้างเคียง: ง่วง คลื่นใส้อาเจียน</p>
+                                    <p class="card-text" style="font-size: 18px;">{{medicine.medication.side_effects}}
+                                    </p>
 
-                                    <input class="form-check-input checkbox-large" type="checkbox" value=""
-                                        id="flexCheckDefault">
-                                    <label class="form-check-label" for="flexCheckDefault">
-                                        <p style="font-size: 18px;">ทานยาเเล้ว</p>
-                                    </label>
+                                    <form method="post" action="{% url 'update_status' medicine.id %}">
+                                        {% csrf_token %}
+                                        
+                                        <input class="form-check-input checkbox-large" type="checkbox"
+                                            id="check{{medicine.id}}" {% if medicine.is_eaten %} checked {% endif %} 
+                                            name = "is_eaten">                                       
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            <p style="font-size: 18px;">ทานยาเเล้ว</p>
+                                        </label>
+                                        <br>
+                                        <button type="submit" class="btn btn-success" >บันทึกสถานะการทานยา </button>
+                                    </form>
 
 
                                     <br>
@@ -221,11 +272,14 @@
 
                         </div>
                     </div>
+                    {% endfor %}
 
 
                 </div>
             </div>
         </div>
+
+
 
         <!-- ตอนเย็น + ไม่มียาที่ต้องกิน -->
         <div class="accordion-item">
@@ -234,20 +288,32 @@
                     data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree"
                     style="background-color: #FEF8D8;">
                     <div>
-                        <h3 style="margin-bottom: 12px; margin-left: 4px;">ตอนเช้า</h3>
+                        <h3 style="margin-bottom: 12px; margin-left: 4px;">ตอนเย็น</h3>
 
                         <!-- Div สีขาวขอบมนสำหรับ "จำนวนยาที่ต้องทาน : 1 เม็ด" -->
-                        <div
-                            style="background-color: white; padding: 5px 10px; border-radius: 12px; display: inline-block; margin-bottom: 5px;">
-                            จำนวนยาที่ต้องทาน : 1 เม็ด
-                        </div>
+
                         <br>
 
                         <!-- Div สีแดงขอบมนสำหรับ "สถานะ: กินยาไม่ครบ" -->
+                        <!-- สถานะทานยา -->
+                        {% if eve_status == False %}
+                        <div
+                            style="background-color: #FF9F9F; padding: 5px 10px; border-radius: 12px; display: inline-block;">
+                            สถานะ: ทานยาไม่ครบ
+                        </div>
+                        {% elif eve_status == True %}
                         <div
                             style="background-color: #85FF71; padding: 5px 10px; border-radius: 12px; display: inline-block;">
-                            สถานะ: ไม่มียาที่ต้องกิน
+                            สถานะ: ทานยาครบ
                         </div>
+                        {% elif eve_status == 2 %}
+                        <div
+                            style="background-color: #85FF71; padding: 5px 10px; border-radius: 12px; display: inline-block;">
+                            สถานะ: ไม่มียาที่ต้องทาน
+                        </div>
+                        {% endif %}
+
+
                     </div>
                 </button>
             </h2>
@@ -256,6 +322,7 @@
 
 
                     <!-- card เเสดงรายละเอียดยา -->
+                    {% for medicine in medicine_eve %}
                     <div class="card mb-3" style="max-width: 540px;">
                         <div class="row g-0">
 
@@ -266,20 +333,29 @@
 
                             <div class="col-md-8">
                                 <div class="card-body">
-                                    <h4 class="card-title">ชื่อยา: cartoon ahh medicine</h4>
+                                    <h4 class="card-title">{{medicine.medication.name}}</h4>
                                     <div class="row">
-                                        <p class="card-text col-5" style="font-size: 18px;">ปริมาณ: 1 เม็ด</p>
-                                        <div class="col-7 status_meal text-center" style="font-size: 18px;">
-                                            หลังอาหารกลางวัน
+                                        <p class="card-text col-6" style="font-size: 18px;">ปริมาณ:
+                                            {{medicine.quantity}}</p>
+                                        <div class="col-6 status_meal text-center" style="font-size: 18px;">
+                                            {{medicine.before_after}}
                                         </div>
                                     </div>
-                                    <p class="card-text" style="font-size: 18px;">ผลข้างเคียง: ง่วง คลื่นใส้อาเจียน</p>
+                                    <p class="card-text" style="font-size: 18px;">{{medicine.medication.side_effects}}
+                                    </p>
 
-                                    <input class="form-check-input checkbox-large" type="checkbox" value=""
-                                        id="flexCheckDefault">
-                                    <label class="form-check-label" for="flexCheckDefault">
-                                        <p style="font-size: 18px;">ทานยาเเล้ว</p>
-                                    </label>
+                                    <form method="post" action="{% url 'update_status' medicine.id %}">
+                                        {% csrf_token %}
+                                        
+                                        <input class="form-check-input checkbox-large" type="checkbox"
+                                            id="check{{medicine.id}}" {% if medicine.is_eaten %} checked {% endif %} 
+                                            name = "is_eaten">                                       
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            <p style="font-size: 18px;">ทานยาเเล้ว</p>
+                                        </label>
+                                        <br>
+                                        <button type="submit" class="btn btn-success" >บันทึกสถานะการทานยา </button>
+                                    </form>
 
 
                                     <br>
@@ -288,12 +364,105 @@
 
                         </div>
                     </div>
+                    {% endfor %}
 
 
 
                 </div>
             </div>
         </div>
+
+
+        <!-- ตอนกลางคืน -->
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour"
+                    style="background-color: #eadbec;">
+                    <div>
+                        <h3 style="margin-bottom: 12px; margin-left: 4px;">ตอนกลางคืน</h3>
+
+                        <!-- Div สีขาวขอบมนสำหรับ "จำนวนยาที่ต้องทาน : 1 เม็ด" -->
+
+                        <br>
+
+                        <!-- Div สีแดงขอบมนสำหรับ "สถานะ: กินยาไม่ครบ" -->
+                        <!-- สถานะทานยา -->
+                        {% if night_status == False %}
+                        <div
+                            style="background-color: #FF9F9F; padding: 5px 10px; border-radius: 12px; display: inline-block;">
+                            สถานะ: ทานยาไม่ครบ
+                        </div>
+                        {% elif night_status == True %}
+                        <div
+                            style="background-color: #85FF71; padding: 5px 10px; border-radius: 12px; display: inline-block;">
+                            สถานะ: ทานยาครบ
+                        </div>
+                        {% elif night_status == 2 %}
+                        <div
+                            style="background-color: #85FF71; padding: 5px 10px; border-radius: 12px; display: inline-block;">
+                            สถานะ: ไม่มียาที่ต้องทาน
+                        </div>
+                        {% endif %}
+
+                    </div>
+                </button>
+            </h2>
+            <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+
+
+                    <!-- card เเสดงรายละเอียดยา -->
+                    {% for medicine in medicine_night %}
+                    <div class="card mb-3" style="max-width: 540px;">
+                        <div class="row g-0">
+
+                            <div class="col-md-4">
+                                <img src="{% static 'images_component/bg.jpg' %}" class="img-fluid rounded-start"
+                                    alt="...">
+                            </div>
+
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <h4 class="card-title">{{medicine.medication.name}}</h4>
+                                    <div class="row">
+                                        <p class="card-text col-6" style="font-size: 18px;">ปริมาณ:
+                                            {{medicine.quantity}}</p>
+                                        <div class="col-6 status_meal text-center" style="font-size: 18px;">
+                                            {{medicine.before_after}}
+                                        </div>
+                                    </div>
+                                    <p class="card-text" style="font-size: 18px;">{{medicine.medication.side_effects}}
+                                    </p>
+
+                                    <form method="post" action="{% url 'update_status' medicine.id %}">
+                                        {% csrf_token %}
+                                        
+                                        <input class="form-check-input checkbox-large" type="checkbox"
+                                            id="check{{medicine.id}}" {% if medicine.is_eaten %} checked {% endif %} 
+                                            name = "is_eaten">                                       
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            <p style="font-size: 18px;">ทานยาเเล้ว</p>
+                                        </label>
+                                        <br>
+                                        <button type="submit" class="btn btn-success" >บันทึกสถานะการทานยา </button>
+                                    </form>
+
+
+                                    <br>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    {% endfor %}
+
+
+
+                </div>
+            </div>
+        </div>
+
 
     </div>
 </div>
