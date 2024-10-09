@@ -23,7 +23,7 @@
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-2" id="homelogo">
-                    <a class="navbar-brand">
+                    <a class="navbar-brand" href="{% url 'calendar' %}">
                         <svg width="36" height="36" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M10.5 25.6667V14H17.5V25.6667M3.5 10.5L14 2.33333L24.5 10.5V23.3333C24.5 23.9522 24.2542 24.5457 23.8166 24.9832C23.379 25.4208 22.7855 25.6667 22.1667 25.6667H5.83333C5.21449 25.6667 4.621 25.4208 4.18342 24.9832C3.74583 24.5457 3.5 23.9522 3.5 23.3333V10.5Z" stroke="#1E1E1E" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
@@ -35,7 +35,7 @@
                 <div class="col-7">
                     <div class="row align-items-center">
                         <div class="col-10" id="usernameprofile">
-                            <b>Nontakorn pumloyfa</b>
+                            <b>{{request.user.first_name}} {{request.user.last_name}}</b>
                         </div>
                         <div class="col-2" id="pictureprofilediv">
                             <img src="https://comicvine.gamespot.com/a/uploads/scale_medium/6/62058/1225416-1369424_picture_1.png" width="36" height="36" id="pictureprofile">
