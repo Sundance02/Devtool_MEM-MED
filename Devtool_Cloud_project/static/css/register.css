@@ -1,0 +1,93 @@
+html:lang(th) {
+    font-family: "Mitr", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+#gradiabg {
+    min-height: 100vh;
+    background: linear-gradient(45deg, #133349, #3395d6);
+}
+
+#bgblackround {
+    background-color: rgba(0, 0, 0, 0.371);
+    border-radius: 60px;
+    padding: 2%;
+    margin-top: 2% !important;
+}
+
+#registertitle {
+    font-family: "Mitr", system-ui;
+    font-weight: 400;
+    font-size: 300%;
+    color: white;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active  {
+    transition: background-color 5000s;
+    -webkit-text-fill-color: rgb(255, 255, 255) !important;
+    font-size: 100%;
+    font-family: "Mitr", sans-serif;
+    font-weight: 200;
+    font-style: normal;
+    padding-left: 3%;
+}
+
+#textlargewhite {
+    font-family: "Mitr", system-ui;
+    font-weight: 300;
+    font-size: 150%;
+    color: white;
+}
+
+#id_username, #id_email, #id_first_name, #id_last_name, #id_room_id, #id_password1, #id_password2, #id_birthdate, #id_allergies, #id_medical_history {
+    background-color: rgba(0, 0, 0, 0.162);
+    border: transparent;
+    border-bottom: white 1px;
+    border-bottom: white;
+    width: 100%;
+    border-radius: 60px;
+    padding: 2%;
+    color: white;
+    font-size: 100%;
+    font-family: "Mitr", sans-serif;
+    font-weight: 200;
+    font-style: normal;
+    padding-left: 3%;
+    &:focus-visible{
+        outline: none;
+    }
+}
+
+#alertred {
+    font-size: 100%;
+    font-family: "Mitr", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+    padding: 20%;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background-color: transparent;
+    background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background-color: rgba(13, 13, 13, 0.349); 
+    border-radius: 60px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(13, 13, 13, 0.725);
+}

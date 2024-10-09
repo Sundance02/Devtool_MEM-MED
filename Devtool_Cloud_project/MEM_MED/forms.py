@@ -14,6 +14,28 @@ from django import forms
 
 from MEM_MED.models import *
 
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User, Group
+
+class RegisterForm(UserCreationForm):
+    email = forms.EmailField(required=True)
+    birthdate = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
+    allergies = forms.CharField(max_length=100)
+    medical_history = forms.CharField(max_length=100)
+
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'first_name', 'last_name', 'password1', 'password2', 'birthdate', 'allergies', 'medical_history']
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.email = self.cleaned_data['email']
+        if commit:
+            user.save()  # บันทึกข้อมูล User
+            patient_group = Group.objects.get(name='Patient')
+            patient_group.user_set.add(user)
+        return user
+
 class AddMedicineForm(ModelForm):
 
     class Meta:
@@ -48,4 +70,6 @@ class MedicationScheduleForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(MedicationScheduleForm, self).__init__(*args, **kwargs)
-        self.fields['is_eaten'].widget = forms.HiddenInput()    
+        self.fields['is_eaten'].widget = forms.HiddenInput()
+
+
