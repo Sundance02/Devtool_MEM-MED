@@ -24,7 +24,22 @@ class AddMedicineForm(ModelForm):
                   "description",
                   "side_effects",
                 ]
-        
+
+class AddDailyMedicineForm(ModelForm):
+
+    class Meta:
+        model = MedicationSchedule
+        fields = ["patient",
+                  "medication",
+                  "time_to_take",
+                  "date_to_take",
+                  "before_after",
+                  "is_eaten",
+                  "quantity",
+                  "instructions"]
+        widgets = {
+            'date_to_take': forms.DateInput(attrs={'type': 'date'}),
+        }
 
 class MedicationScheduleForm(forms.ModelForm):
     class Meta:

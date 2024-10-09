@@ -83,9 +83,9 @@ DATABASES = {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": "MEM_MED",
         "USER": "postgres",
-        "PASSWORD": "password",
+        "PASSWORD": "0930038864",
         "HOST": "localhost",
-        "PORT": "5432",
+        "PORT": "8000",
     }
 }
 
