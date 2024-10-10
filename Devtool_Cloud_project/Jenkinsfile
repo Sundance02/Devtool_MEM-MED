@@ -14,53 +14,71 @@ pipeline {
     stages {
 
 
-        stage('Clone Git Repository') {
+        // stage('Clone Git Repository') {
+        //     steps {
+        //         script {
+        //             sshagent([SSH_CREDENTIALS]) {
+        //                 // ลบ directory หากมีอยู่แล้ว
+        //                 sh "ssh -o StrictHostKeyChecking=no $REMOTE_HOST 'rm -rf $PROJECT_DIR || true'"
+        //                 // Clone repository
+        //                 sh "ssh -o StrictHostKeyChecking=no $REMOTE_HOST 'git clone $GIT_REPO'"
+        //             }
+        //         }
+        //     }
+        // }
+
+        stage('Start Jenkins') {
             steps {
-                script {
-                    sshagent([SSH_CREDENTIALS]) {
-                        // ลบ directory หากมีอยู่แล้ว
-                        sh "ssh -o StrictHostKeyChecking=no $REMOTE_HOST 'rm -rf $PROJECT_DIR || true'"
-                        // Clone repository
-                        sh "ssh -o StrictHostKeyChecking=no $REMOTE_HOST 'git clone $GIT_REPO'"
-                    }
-                }
+                // Checkout your source code from version control
+             
+                    sh 'echo Start Jenkins............'
+                    sh 'echo docker : user = $DOCKER_CREDENTIALS_USR : password = $DOCKER_CREDENTIALS_PSW'
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                script {
-                    sshagent([SSH_CREDENTIALS]) {
-                        // เข้าไปใน directory $BUILD_DIR เพื่อ build Docker image
-                        sh "ssh -o StrictHostKeyChecking=no $REMOTE_HOST 'cd $PROJECT_DIR/$BUILD_DIR && docker build -t $DOCKER_IMAGE .'"
-                    }
-                }
+                    // Build the Docker image
+                    
+                    dir('./Devtool_Cloud_project') {
+                       sh 'echo "Running in $(pwd)"'
+                       sh 'echo start build the Docker image = $DOCKER_IMAGE'
+                       sh 'docker build -t $DOCKER_IMAGE .'
+                    }   
+                  
             }
         }
+
+        
 
         stage('Push to Docker Hub') {
             steps {
                 script {
+                    
+                    // Login to Docker Hub
                     sh 'echo $DOCKER_CREDENTIALS_PSW | docker login --username $DOCKER_CREDENTIALS_USR --password-stdin'
+                    // Push the image
                     sh 'docker push $DOCKER_IMAGE'
                 }
             }
         }
 
 
-
-        stage('Run Docker Compose on Remote Server') {
+        stage('Deploy') {
             steps {
                 script {
-                    sshagent([SSH_CREDENTIALS]) {
-                        // หยุด container ที่กำลังรันอยู่
-                        sh "ssh -o StrictHostKeyChecking=no $REMOTE_HOST 'cd $PROJECT_DIR/$BUILD_DIR && docker compose down || true'"
-                        // รัน docker-compose ใหม่
-                        sh "ssh -o StrictHostKeyChecking=no $REMOTE_HOST 'cd $PROJECT_DIR/$BUILD_DIR && docker compose up -d'"
-                    }
+                    // Pull the Docker image from Docker Hub
+                    sh 'docker pull $DOCKER_IMAGE'
+                    // Run the Docker container
+                    sh 'docker run -d --name mem_med -p 8085:80 $DOCKER_IMAGE'
                 }
             }
         }
+
+
+
+
+        
     }
 
     post {
