@@ -65,9 +65,9 @@ pipeline {
                 script {
                     sshagent([SSH_CREDENTIALS]) {
                         // หยุด container ที่กำลังรันอยู่
-                        sh "ssh -o StrictHostKeyChecking=no $REMOTE_HOST 'cd $PROJECT_DIR/$BUILD_DIR && docker-compose down || true'"
+                        sh "ssh -o StrictHostKeyChecking=no $REMOTE_HOST 'cd $PROJECT_DIR/$BUILD_DIR && docker compose down || true'"
                         // รัน docker-compose ใหม่
-                        sh "ssh -o StrictHostKeyChecking=no $REMOTE_HOST 'cd $PROJECT_DIR/$BUILD_DIR && docker-compose up -d'"
+                        sh "ssh -o StrictHostKeyChecking=no $REMOTE_HOST 'cd $PROJECT_DIR/$BUILD_DIR && docker compose up -d'"
                     }
                 }
             }
