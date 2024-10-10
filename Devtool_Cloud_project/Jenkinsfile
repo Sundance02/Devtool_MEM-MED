@@ -41,7 +41,7 @@ pipeline {
             }
         }
 
-        stage('SSH to Remote Server') {
+     stage('SSH to Remote Server') {
             steps {
                 script {
                     // ใช้ SSH เข้าสู่เซิร์ฟเวอร์
@@ -52,27 +52,30 @@ pipeline {
             }
         }
 
-        stage('Copy Docker Compose to Remote') {
-            steps {
-                sshagent([SSH_CREDENTIALS]) {
-                    // คัดลอกไฟล์ docker-compose.yml ไปยังเซิร์ฟเวอร์ remote
-                    sh "scp -o StrictHostKeyChecking=no ./docker-compose.yml $REMOTE_HOST:/path/to/remote/directory"
-                }
-            }
-        }
+   
 
-        stage('Run Docker Compose on Remote Server') {
+        stage('Run Docker on Remote Server') {
             steps {
+                // Uses the SSH Agent plugin to setup SSH credentials.
                 sshagent([SSH_CREDENTIALS]) {
-                    // Pull Docker image บน remote server และใช้ docker-compose ขึ้น container
-                    sh "ssh -o StrictHostKeyChecking=no $REMOTE_HOST 'docker-compose pull'"
-                    sh "ssh -o StrictHostKeyChecking=no $REMOTE_HOST 'docker-compose down || true'"  // หยุดการทำงานของ container เดิม
-                    sh "ssh -o StrictHostKeyChecking=no $REMOTE_HOST 'docker-compose up -d'"  // รัน container ใหม่
-                    sh "ssh -o StrictHostKeyChecking=no $REMOTE_HOST 'docker-compose ps'"  // ตรวจสอบสถานะ container
+                    // These commands manage Docker containers on the remote server.
+                    // It stops and removes all containers, then removes all images, before running a new container.
+                    sh 'docker pull $DOCKER_IMAGE'
+                    sh "ssh -o StrictHostKeyChecking=no $REMOTE_HOST 'docker stop \$(docker ps -a -q) || true'"
+                    sh "ssh -o StrictHostKeyChecking=no $REMOTE_HOST 'docker rm \$(docker ps -a -q) || true'"
+                    sh "ssh -o StrictHostKeyChecking=no $REMOTE_HOST 'docker rmi \$(docker images -q) || true'"
+                    sh "ssh -o StrictHostKeyChecking=no $REMOTE_HOST 'docker run -d --name mem_med -p 8000:80 $DOCKER_IMAGE'"
+                    sh "ssh -o StrictHostKeyChecking=no $REMOTE_HOST 'docker ps -a'"
                 }
             }
         }
-    }
+  
+
+
+
+        
+ }
+
 
     post {
         always {
