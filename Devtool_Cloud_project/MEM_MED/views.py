@@ -138,7 +138,8 @@ class daily_medicine_detail(LoginRequiredMixin, PermissionRequiredMixin, View):
     def get(self, request, year, month, day):
 
         date_to_take = date(year,month,day)
-        patient = Patient.objects.get(pk=1) #fix ไว้
+        user = User.objects.get(pk=request.user.id)
+        patient = Patient.objects.get(user = user) #fix ไว้
         medicine_sche = MedicationSchedule.objects.filter(patient = patient, date_to_take = date_to_take)
         th_month = int_to_thai_month(month) 
 
