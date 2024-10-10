@@ -21,6 +21,9 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.views.generic import FormView
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
+class RedirectView(View):
+    def get(self, request):
+        return redirect("login")
 
 class Login(View):
     def get(self, request):
