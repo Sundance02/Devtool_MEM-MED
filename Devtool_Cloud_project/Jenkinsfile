@@ -2,13 +2,14 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE    = 'sundance02/fastapi-webhook:latest'
+        DOCKER_IMAGE    = 'sundance02/mem_med:latest'
         REMOTE_HOST     = 'fame050647@34.143.237.227'
         SSH_CREDENTIALS = 'ssh-prod_instance'
         DOCKER_CREDENTIALS = credentials('dockerhub')
     }
 
     stages {
+        
         stage('Start Jenkins') {
             steps {
                 sh 'echo Start Jenkins............'
