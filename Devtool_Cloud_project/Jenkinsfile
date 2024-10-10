@@ -13,11 +13,6 @@ pipeline {
 
     stages {
 
-        stage('Start Jenkins') {
-            steps {
-                sh 'echo Start Jenkins............'
-            }
-        }
 
         stage('Clone Git Repository') {
             steps {
@@ -52,13 +47,7 @@ pipeline {
             }
         }
 
-        stage('Login to Docker Hub') {
-            steps {
-                withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'DOCKERHUB_PASSWORD', usernameVariable: 'DOCKERHUB_USER')]) {
-                    sh 'echo $DOCKERHUB_PASSWORD | docker login --username $DOCKERHUB_USER --password-stdin'
-                }
-            }
-        }
+
 
         stage('Run Docker Compose on Remote Server') {
             steps {
