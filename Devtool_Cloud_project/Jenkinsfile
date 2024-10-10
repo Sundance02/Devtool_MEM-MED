@@ -2,25 +2,23 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE    = 'sundance02/fastapi-webhook:latest'
-        REMOTE_HOST     = 'fame050647@34.142.246.58'
+        DOCKER_IMAGE    = 'sundance02/mem_med:latest'
+        REMOTE_HOST     = 'fame050647@34.143.237.227'
         SSH_CREDENTIALS = 'ssh-prod_instance'
         DOCKER_CREDENTIALS = credentials('dockerhub')
     }
 
     stages {
+        
         stage('Start Jenkins') {
             steps {
                 sh 'echo Start Jenkins............'
-                sh 'echo docker : user = $DOCKER_CREDENTIALS_USR : password = $DOCKER_CREDENTIALS_PSW'
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                dir('./') {
-                    sh 'echo "Running in $(pwd)"'
-                    sh 'echo start build the Docker image = $DOCKER_IMAGE'
+                dir('./Devtool_Cloud_project') {
                     sh 'docker build -t $DOCKER_IMAGE .'
                 }   
             }
@@ -43,10 +41,10 @@ pipeline {
             }
         }
 
-        stage('SSH to Remote Server') {
+     stage('SSH to Remote Server') {
             steps {
                 script {
-                    // ใช้ SSH เข้าสู่เซิร์ฟเวอร์0
+                    // ใช้ SSH เข้าสู่เซิร์ฟเวอร์
                     sshagent([SSH_CREDENTIALS]) {
                         sh "ssh -o StrictHostKeyChecking=no $REMOTE_HOST 'echo Connected to remote server'"
                     }
@@ -66,11 +64,16 @@ pipeline {
                     sh "ssh -o StrictHostKeyChecking=no $REMOTE_HOST 'docker stop \$(docker ps -a -q) || true'"
                     sh "ssh -o StrictHostKeyChecking=no $REMOTE_HOST 'docker rm \$(docker ps -a -q) || true'"
                     sh "ssh -o StrictHostKeyChecking=no $REMOTE_HOST 'docker rmi \$(docker images -q) || true'"
-                    sh "ssh -o StrictHostKeyChecking=no $REMOTE_HOST 'docker run -d --name fastapi-webhook -p 8085:80 $DOCKER_IMAGE'"
+                    sh "ssh -o StrictHostKeyChecking=no $REMOTE_HOST 'docker run -d --name mem_med -p 8000:80 $DOCKER_IMAGE'"
                     sh "ssh -o StrictHostKeyChecking=no $REMOTE_HOST 'docker ps -a'"
                 }
             }
         }
+  
+
+
+
+        
  }
 
 
