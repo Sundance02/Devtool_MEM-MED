@@ -28,7 +28,8 @@ SECRET_KEY = 'django-insecure-hy^n66@4g(#7!sma@v1o@mgf8wgs^=highkwj7$8sfxk19nh%=
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+
 
 
 # Application definition
@@ -79,13 +80,12 @@ WSGI_APPLICATION = 'Devtool_Cloud_project.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "MEM_MED",
-        "USER": "postgres",
-        "PASSWORD": "0930038864",
-        "HOST": "localhost",
-        "PORT": "8000",
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'HOST': '35.198.206.1',
+        'USER': 'username',
+        'PASSWORD': 'usernameusername',
+        'NAME': 'MEM_MED',
     }
 }
 
@@ -144,3 +144,5 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
