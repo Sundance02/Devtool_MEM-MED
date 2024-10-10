@@ -208,7 +208,7 @@ class calendar(LoginRequiredMixin, PermissionRequiredMixin, View):
     
     def get(self, request, year=None, month=None):
         patient = Patient.objects.get(user = request.user)
-        log = MedicationLog.objects.filter(patient = patient)
+        log = MedicationSchedule.objects.filter(patient = patient)
 
         if year is None or month is None:
             now = datetime.now()
@@ -221,9 +221,9 @@ class calendar(LoginRequiredMixin, PermissionRequiredMixin, View):
         cal = cale.Calendar()
         month_days = cal.monthdayscalendar(year, month)
 
-        log_dates = {log.date_taken.day for log in log if log.date_taken.year == year and log.date_taken.month == month and log.missed == None}
-        log_dates_missed = {log.date_taken.day for log in log if log.date_taken.year == year and log.date_taken.month == month and log.missed == True}
-        log_dates_not_missed = {log.date_taken.day for log in log if log.date_taken.year == year and log.date_taken.month == month and log.missed == False}
+        log_dates = {log.date_to_take.day for log in log if log.date_to_take.year == year and log.date_to_take.month == month and log.is_eaten == None}
+        log_dates_missed = {log.date_to_take.day for log in log if log.date_to_take.year == year and log.date_to_take.month == month and log.is_eaten == False}
+        log_dates_not_missed = {log.date_to_take.day for log in log if log.date_to_take.year == year and log.date_to_take.month == month and log.is_eaten == True}
 
         if month == 1:
             prev_month = 12
