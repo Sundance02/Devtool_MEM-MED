@@ -6,72 +6,84 @@ pipeline {
         REMOTE_HOST     = 'fame050647@34.143.237.227'
         SSH_CREDENTIALS = 'ssh-prod_instance'
         DOCKER_CREDENTIALS = credentials('dockerhub')
-        GIT_REPO        = 'https://github.com/Sundance02/Devtool_MEM-MED.git'
-        PROJECT_DIR     = 'Devtool_MEM-MED'  // ชื่อ directory จาก repo ที่จะ clone
-        BUILD_DIR       = 'Devtool_Cloud_project'  // ชื่อ directory ที่ต้อง cd เข้าไปเพื่อ build
+
     }
 
     stages {
 
+
+
         stage('Start Jenkins') {
             steps {
-                sh 'echo Start Jenkins............'
-            }
-        }
-
-        stage('Clone Git Repository') {
-            steps {
-                script {
-                    sshagent([SSH_CREDENTIALS]) {
-                        // ลบ directory หากมีอยู่แล้ว
-                        sh "ssh -o StrictHostKeyChecking=no $REMOTE_HOST 'rm -rf $PROJECT_DIR || true'"
-                        // Clone repository
-                        sh "ssh -o StrictHostKeyChecking=no $REMOTE_HOST 'git clone $GIT_REPO'"
-                    }
-                }
+                // Checkout your source code from version control
+             
+                    sh 'echo Start Jenkins............'
+                    sh 'echo docker : user = $DOCKER_CREDENTIALS_USR : password = $DOCKER_CREDENTIALS_PSW'
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                script {
-                    sshagent([SSH_CREDENTIALS]) {
-                        // เข้าไปใน directory $BUILD_DIR เพื่อ build Docker image
-                        sh "ssh -o StrictHostKeyChecking=no $REMOTE_HOST 'cd $PROJECT_DIR/$BUILD_DIR && docker build -t $DOCKER_IMAGE .'"
-                    }
-                }
+                    // Build the Docker image
+                    
+                    dir('./Devtool_Cloud_project') {
+                       sh 'echo "Running in $(pwd)"'
+                       sh 'echo start build the Docker image = $DOCKER_IMAGE'
+                       sh 'docker build -t $DOCKER_IMAGE .'
+                    }   
+                  
             }
         }
+
+        
 
         stage('Push to Docker Hub') {
             steps {
                 script {
+                    
+                    // Login to Docker Hub
                     sh 'echo $DOCKER_CREDENTIALS_PSW | docker login --username $DOCKER_CREDENTIALS_USR --password-stdin'
+                    // Push the image
                     sh 'docker push $DOCKER_IMAGE'
                 }
             }
         }
 
-        stage('Login to Docker Hub') {
-            steps {
-                withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'DOCKERHUB_PASSWORD', usernameVariable: 'DOCKERHUB_USER')]) {
-                    sh 'echo $DOCKERHUB_PASSWORD | docker login --username $DOCKERHUB_USER --password-stdin'
-                }
-            }
-        }
 
-        stage('Run Docker Compose on Remote Server') {
+
+
+        stage('SSH to Remote Server') {
             steps {
                 script {
+                    // ใช้ SSH เข้าสู่เซิร์ฟเวอร์0
                     sshagent([SSH_CREDENTIALS]) {
-                        // หยุด container ที่กำลังรันอยู่
-                        sh "ssh -o StrictHostKeyChecking=no $REMOTE_HOST 'cd $PROJECT_DIR/$BUILD_DIR && docker compose down || true'"
-                        // รัน docker-compose ใหม่
-                        sh "ssh -o StrictHostKeyChecking=no $REMOTE_HOST 'cd $PROJECT_DIR/$BUILD_DIR && docker compose up -d'"
+                        sh "ssh -o StrictHostKeyChecking=no $REMOTE_HOST 'echo Connected to remote server'"
                     }
                 }
             }
         }
+
+
+        stage('Pull and Run Docker image on Remote Server') {
+            steps {
+                // Uses the SSH Agent plugin to setup SSH credentials.
+                sshagent([SSH_CREDENTIALS]) {
+                    // These commands manage Docker containers on the remote server.
+                    // It stops and removes all containers, then removes all images, before running a new container.
+                    sh 'docker pull $DOCKER_IMAGE'
+                    sh "ssh -o StrictHostKeyChecking=no $REMOTE_HOST 'docker stop \$(docker ps -a -q) || true'"
+                    sh "ssh -o StrictHostKeyChecking=no $REMOTE_HOST 'docker rm \$(docker ps -a -q) || true'"
+                    sh "ssh -o StrictHostKeyChecking=no $REMOTE_HOST 'docker rmi \$(docker images -q) || true'"
+                    sh "ssh -o StrictHostKeyChecking=no $REMOTE_HOST 'docker run -d --name mem_med -p 8000:8000 $DOCKER_IMAGE'"
+                    sh "ssh -o StrictHostKeyChecking=no $REMOTE_HOST 'docker ps -a'"
+                }
+            }
+        }
+
+
+
+
+        
     }
 
     post {
