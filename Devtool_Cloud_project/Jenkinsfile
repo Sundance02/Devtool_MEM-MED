@@ -8,6 +8,7 @@ pipeline {
         DOCKER_CREDENTIALS = credentials('dockerhub')
         GIT_REPO        = 'https://github.com/Sundance02/Devtool_MEM-MED.git'
         PROJECT_DIR     = 'Devtool_MEM-MED'  // ชื่อ directory จาก repo ที่จะ clone
+        BUILD_DIR       = 'Devtool_Cloud_project'  // ชื่อ directory ที่ต้อง cd เข้าไปเพื่อ build
     }
 
     stages {
@@ -35,8 +36,8 @@ pipeline {
             steps {
                 script {
                     sshagent([SSH_CREDENTIALS]) {
-                        // เข้าไปใน directory ที่ clone มาและทำการ build Docker image
-                        sh "ssh -o StrictHostKeyChecking=no $REMOTE_HOST 'cd $PROJECT_DIR && docker build -t $DOCKER_IMAGE .'"
+                        // เข้าไปใน directory $BUILD_DIR เพื่อ build Docker image
+                        sh "ssh -o StrictHostKeyChecking=no $REMOTE_HOST 'cd $PROJECT_DIR/$BUILD_DIR && docker build -t $DOCKER_IMAGE .'"
                     }
                 }
             }
@@ -64,9 +65,9 @@ pipeline {
                 script {
                     sshagent([SSH_CREDENTIALS]) {
                         // หยุด container ที่กำลังรันอยู่
-                        sh "ssh -o StrictHostKeyChecking=no $REMOTE_HOST 'cd $PROJECT_DIR && docker-compose down || true'"
+                        sh "ssh -o StrictHostKeyChecking=no $REMOTE_HOST 'cd $PROJECT_DIR/$BUILD_DIR && docker compose down || true'"
                         // รัน docker-compose ใหม่
-                        sh "ssh -o StrictHostKeyChecking=no $REMOTE_HOST 'cd $PROJECT_DIR && docker-compose up -d'"
+                        sh "ssh -o StrictHostKeyChecking=no $REMOTE_HOST 'cd $PROJECT_DIR/$BUILD_DIR && docker compose up -d'"
                     }
                 }
             }
