@@ -43,7 +43,7 @@ input:-webkit-autofill:active  {
     color: white;
 }
 
-#id_username, #id_email, #id_first_name, #id_last_name, #id_room_id, #id_password1, #id_password2, #id_birthdate, #id_allergies, #id_medical_history {
+#id_username, #id_email, #id_first_name, #id_last_name, #id_room_id, #id_password1, #id_password2, #id_birthdate, #id_allergies, #id_medical_history, #id_expertise {
     background-color: rgba(0, 0, 0, 0.162);
     border: transparent;
     border-bottom: white 1px;

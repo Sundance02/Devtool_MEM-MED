@@ -25,9 +25,9 @@
     <div class="container">
         <div class="row justify-content-center" >
             <div class="col-md-6" id="bgblackround">
-                <h2 class="text-center" id="registertitle">Patient Registration</h2>
+                <h2 class="text-center" id="registertitle">Doctor Registration</h2>
                 <br>
-                <form method="POST" action="{% url 'register' %}">
+                <form method="POST" action="{% url 'register-doctor' %}">
                     {% csrf_token %}
                     {{ form.non_field_errors }}
                     <div class="mb-3">
@@ -95,39 +95,23 @@
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label for="{{ form.allergies.id_for_label }}" class="form-label" id="textlargewhite">Allergies :</label>
-                        {% if form.allergies.errors %}
+                        <label for="{{ form.expertise.id_for_label }}" class="form-label" id="textlargewhite">Expertise :</label>
+                        {% if form.expertise.errors %}
                             <div class="alert alert-danger d-flex align-items-center" role="alert" id="alertred">
                                 <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M24 17.9999V25.9999M24 33.9999H24.02M20.58 7.71992L3.64 35.9999C3.29073 36.6048 3.10593 37.2905 3.10397 37.989C3.10202 38.6874 3.28298 39.3742 3.62885 39.981C3.97472 40.5878 4.47345 41.0934 5.07541 41.4476C5.67738 41.8018 6.36159 41.9922 7.06 41.9999H40.94C41.6384 41.9922 42.3226 41.8018 42.9246 41.4476C43.5265 41.0934 44.0253 40.5878 44.3711 39.981C44.717 39.3742 44.898 38.6874 44.896 37.989C44.8941 37.2905 44.7093 36.6048 44.36 35.9999L27.42 7.71992C27.0635 7.13213 26.5614 6.64616 25.9624 6.30889C25.3633 5.97162 24.6875 5.79443 24 5.79443C23.3125 5.79443 22.6367 5.97162 22.0376 6.30889C21.4386 6.64616 20.9365 7.13213 20.58 7.71992Z" stroke="#C0392B" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
                                 <div>
-                                    {{ form.allergies.errors.0 }}
+                                    {{ form.expertise.errors.0 }}
                                 </div>
                             </div>
                         {% endif %}
                         <div id="inputformdiv">
-                            {{ form.allergies }}
+                            {{ form.expertise }}
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label for="{{ form.medical_history.id_for_label }}" class="form-label" id="textlargewhite">Medical History :</label>
-                        {% if form.medical_history.errors %}
-                            <div class="alert alert-danger d-flex align-items-center" role="alert" id="alertred">
-                                <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M24 17.9999V25.9999M24 33.9999H24.02M20.58 7.71992L3.64 35.9999C3.29073 36.6048 3.10593 37.2905 3.10397 37.989C3.10202 38.6874 3.28298 39.3742 3.62885 39.981C3.97472 40.5878 4.47345 41.0934 5.07541 41.4476C5.67738 41.8018 6.36159 41.9922 7.06 41.9999H40.94C41.6384 41.9922 42.3226 41.8018 42.9246 41.4476C43.5265 41.0934 44.0253 40.5878 44.3711 39.981C44.717 39.3742 44.898 38.6874 44.896 37.989C44.8941 37.2905 44.7093 36.6048 44.36 35.9999L27.42 7.71992C27.0635 7.13213 26.5614 6.64616 25.9624 6.30889C25.3633 5.97162 24.6875 5.79443 24 5.79443C23.3125 5.79443 22.6367 5.97162 22.0376 6.30889C21.4386 6.64616 20.9365 7.13213 20.58 7.71992Z" stroke="#C0392B" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
-                                <div>
-                                    {{ form.medical_history.errors.0 }}
-                                </div>
-                            </div>
-                        {% endif %}
-                        <div id="inputformdiv">
-                            {{ form.medical_history }}
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="{{ form.usename.id_for_label }}" class="form-label" id="textlargewhite">Username :</label>
+                        <label for="{{ form.username.id_for_label }}" class="form-label" id="textlargewhite">Username :</label>
                         {% if form.username.errors %}
                             <div class="alert alert-danger d-flex align-items-center" role="alert" id="alertred">
                                 <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">

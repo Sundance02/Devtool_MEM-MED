@@ -19,6 +19,7 @@ import json
 from django.contrib.auth import logout, login
 from django.contrib.auth.forms import AuthenticationForm
 from django.views.generic import FormView
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
 
 class Login(View):
@@ -29,11 +30,21 @@ class Login(View):
     def post(self, request):
         form = AuthenticationForm(data=request.POST)
         if form.is_valid():
-            user = form.get_user() 
+            user = form.get_user()
             login(request,user)
-            return redirect('calendar')  
+            if user.groups.filter(name="Patient").exists():
+                return redirect('calendar')
+            elif user.groups.filter(name="Doctor").exists():
+                return redirect("patient-list")
 
         return render(request,'login.html', {"form":form})
+
+class LogoutView(LoginRequiredMixin, View):
+    login_url = '/login/'
+
+    def get(self, request):
+        logout(request)
+        return redirect('login')
 
 class RegisterView(FormView):
 
@@ -64,33 +75,65 @@ class RegisterView(FormView):
             return redirect('login')
         return render(request, 'register.html', {"form": form})
 
+class RegisterDoctorView(FormView):
+
+    def get(self, request):
+        form = RegisterDoctorForm()
+        #   # เปลี่ยนเส้นทางไปที่หน้า Login หลังจากสมัครเสร็จ
+        return render(request, 'register-doctor.html', {"form": form})
+    
+    def post(self, request):
+        form = RegisterDoctorForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            birthdate = form.cleaned_data['birthdate']
+            expertise = form.cleaned_data['expertise']
+            first_name = form.cleaned_data['first_name']
+            last_name = form.cleaned_data['last_name']
+
+            doctor = Doctor.objects.create(
+                user=user,
+                birthdate=birthdate,
+                expertise=expertise,
+                name=first_name + last_name
+            )
+            doctor.save()
+
+            return redirect('login')
+        return render(request, 'register-doctor.html', {"form": form})
+
 def int_to_thai_month(month_num):
     thai_months = [
         "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", 
         "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", 
         "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"
     ]
-    
+
     if 1 <= month_num <= 12:
         return thai_months[month_num - 1]
     else:
         return "เดือนไม่ถูกต้อง"
 
 
-class update_medicine_status(View):
+class update_medicine_status(LoginRequiredMixin, PermissionRequiredMixin, View):
+    login_url = '/login/'
+    permission_required = ["MEM_MED.view_medicationschedule", "MEM_MED.change_medicationschedule"]
+
     def post(self, request, medicine_id):
-        
+
         medicine = MedicationSchedule.objects.get(pk = medicine_id)
         date = medicine.date_to_take
         print(date.year)
         is_eaten = request.POST.get('is_eaten') == 'on'  # ถ้า checkbox ถูกติ๊กจะได้ True
         medicine.is_eaten = is_eaten
         medicine.save()
-            
+
         return redirect('medicine_sche', year=date.year, month=date.month, day = date.day)
 
 
-class daily_medicine_detail(View):
+class daily_medicine_detail(LoginRequiredMixin, PermissionRequiredMixin, View):
+    login_url = '/login/'
+    permission_required = ["MEM_MED.view_medicationschedule"]
 
     def get(self, request, year, month, day):
 
@@ -98,7 +141,7 @@ class daily_medicine_detail(View):
         patient = Patient.objects.get(pk=1) #fix ไว้
         medicine_sche = MedicationSchedule.objects.filter(patient = patient, date_to_take = date_to_take)
         th_month = int_to_thai_month(month) 
-        
+
         form = MedicationScheduleForm()
 
         #สถานะทานยาโดยรวม
@@ -140,7 +183,7 @@ class daily_medicine_detail(View):
                 break
         if(not medicine_eve):
             eve_status = 2
-        
+
         #ทานยาตอนกลางคืน
         medicine_night = MedicationSchedule.objects.filter(patient = patient, date_to_take = date_to_take, time_to_take = 'ตอนกลางคืน')
         night_status = True
@@ -151,7 +194,6 @@ class daily_medicine_detail(View):
         if(not medicine_night):
             night_status = 2
 
-
         context = {"patient":patient, "medicine_totake":medicine_sche, "th_month":th_month, 'day':day, "year":year, "all_status":all_status,
                     "morning_status":morning_status, "noon_status":noon_status, "eve_status":eve_status, "night_status":night_status,
                     "medicine_morning":medicine_morning, "medicine_noon":medicine_noon, "medicine_eve":medicine_eve, "medicine_night":medicine_night,
@@ -159,7 +201,9 @@ class daily_medicine_detail(View):
         return render(request, 'dailymedicinedetail.html', context)
 
 
-class calendar(View):
+class calendar(LoginRequiredMixin, PermissionRequiredMixin, View):
+    login_url = '/login/'
+    permission_required = ["MEM_MED.view_medicationlog"]
     
     def get(self, request, year=None, month=None):
         patient = Patient.objects.get(user = request.user)
@@ -179,7 +223,7 @@ class calendar(View):
         log_dates = {log.date_taken.day for log in log if log.date_taken.year == year and log.date_taken.month == month and log.missed == None}
         log_dates_missed = {log.date_taken.day for log in log if log.date_taken.year == year and log.date_taken.month == month and log.missed == True}
         log_dates_not_missed = {log.date_taken.day for log in log if log.date_taken.year == year and log.date_taken.month == month and log.missed == False}
-        
+
         if month == 1:
             prev_month = 12
             prev_year = year - 1
@@ -187,14 +231,13 @@ class calendar(View):
             prev_month = month - 1
             prev_year = year
 
-
         if month == 12:
             next_month = 1
             next_year = year + 1
         else:
             next_month = month + 1
             next_year = year
-        
+
         patient_age = year-patient.birthdate.year
 
         return render(request, 'calendar.html', {
@@ -216,20 +259,25 @@ class calendar(View):
 def day_view(request, year, month, day):
     return HttpResponse(f"You clicked on {day}/{month}/{year}")
 
-class PatientListView(View):
+class PatientListView(LoginRequiredMixin, PermissionRequiredMixin, View):
+    login_url = '/login/'
+    permission_required = ["MEM_MED.view_patient"]
 
     def get(self, request):
 
         patient_list_target = Patient.objects.all()
         return render(request, 'patient-list.html', {"patient_list_target" : patient_list_target})
 
-class MedicineAddView(View):
+class MedicineAddView(LoginRequiredMixin, PermissionRequiredMixin, View):
+    login_url = '/login/'
+    permission_required = ["MEM_MED.view_patient", "MEM_MED.view_medication", "MEM_MED.add_medication"]
+
     def get(self, request):
 
         medication_target = Medication.objects.all()
         form = AddMedicineForm()
         return render(request, 'add-medicine.html', {"medication_target" : medication_target, "form" : form})
-    
+
     def post(self, request):
 
         medication_target = Medication.objects.all()
@@ -241,14 +289,18 @@ class MedicineAddView(View):
         else:
             return render(request, 'add-medicine.html', {"medication_target" : medication_target, "form" : form})
 
-class MedicineDeleteView(View):
+class MedicineDeleteView(LoginRequiredMixin, PermissionRequiredMixin, View):
+    login_url = '/login/'
+    permission_required = ["MEM_MED.view_patient", "MEM_MED.delete_medication"]
 
     def get(self, request, pk):
         medication_target = Medication.objects.get(pk=pk)
         medication_target.delete()
         return redirect('add-medicine')
 
-class MedicineEditView(View):
+class MedicineEditView(LoginRequiredMixin, PermissionRequiredMixin, View):
+    login_url = '/login/'
+    permission_required = ["MEM_MED.view_patient", "MEM_MED.view_medication", "MEM_MED.change_medication"]
 
     def get(self, request, pk):
         medication_target = Medication.objects.get(pk=pk)
@@ -267,9 +319,10 @@ class MedicineEditView(View):
             print(form.errors)
             form = AddMedicineForm(instance=medication_target)
             return render(request, 'edit-medicine.html', {"form" : form})
-        
 
-class PatientView(View):
+class PatientView(LoginRequiredMixin, PermissionRequiredMixin, View):
+    login_url = '/login/'
+    permission_required = ["MEM_MED.view_patient", "MEM_MED.view_medicationschedule"]
 
     def get(self, request, pk):
         patient_target = Patient.objects.get(pk=pk)
@@ -294,9 +347,10 @@ class PatientView(View):
 
         return render(request, 'Patient.html', context)
 
-        
+class DailyMedicineAddView(LoginRequiredMixin, PermissionRequiredMixin, View):
+    login_url = '/login/'
+    permission_required = ["MEM_MED.view_patient", "MEM_MED.view_medicationschedule", "MEM_MED.add_medicationschedule"]
 
-class DailyMedicineAddView(View):
     def get(self, request):
 
         medication_schedule_target = MedicationSchedule.objects.all()
@@ -314,14 +368,18 @@ class DailyMedicineAddView(View):
         else:
             return render(request, 'add-daily-medicine.html', {"medication_schedule_target" : medication_schedule_target, "form" : form})
 
-class DailyMedicineDeleteView(View):
+class DailyMedicineDeleteView(LoginRequiredMixin, PermissionRequiredMixin, View):
+    login_url = '/login/'
+    permission_required = ["MEM_MED.view_patient", "MEM_MED.delete_medicationschedule"]
 
     def get(self, request, pk):
         medication_schedule_target = MedicationSchedule.objects.get(pk=pk)
         medication_schedule_target.delete()
         return redirect('add-daily-medicine')
 
-class DailyMedicineEditView(View):
+class DailyMedicineEditView(LoginRequiredMixin, PermissionRequiredMixin, View):
+    login_url = '/login/'
+    permission_required = ["MEM_MED.view_patient", "MEM_MED.view_medicationschedule", "MEM_MED.change_medicationschedule"]
 
     def get(self, request, pk):
         medication_schedule_target = MedicationSchedule.objects.get(pk=pk)

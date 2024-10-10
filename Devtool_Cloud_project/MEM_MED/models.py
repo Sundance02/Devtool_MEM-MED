@@ -14,6 +14,16 @@ class Patient(models.Model):
     def __str__(self):
         return self.name
 
+class Doctor(models.Model):
+
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=255)
+    birthdate = models.DateField()
+    expertise = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return self.name
+
 class Medication(models.Model):
 
     image = models.ImageField(upload_to="images/")

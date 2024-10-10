@@ -36,6 +36,24 @@ class RegisterForm(UserCreationForm):
             patient_group.user_set.add(user)
         return user
 
+class RegisterDoctorForm(UserCreationForm):
+    email = forms.EmailField(required=True)
+    birthdate = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
+    expertise = forms.CharField(max_length=100)
+
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'first_name', 'last_name', 'password1', 'password2', 'birthdate', 'expertise']
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.email = self.cleaned_data['email']
+        if commit:
+            user.save()  # บันทึกข้อมูล User
+            doctor_group = Group.objects.get(name='Doctor')
+            doctor_group.user_set.add(user)
+        return user
+
 class AddMedicineForm(ModelForm):
 
     class Meta:

@@ -45,3 +45,33 @@ html:lang(th) {
     text-align: center;
     justify-content: center;
 }
+
+#titleoffcanvasarea {
+    background-color: #C4F0FA;
+}
+
+#titleoffcanvas {
+    font-size: 200%;
+    font-family: "Nunito", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+#offcanvasitemtitle {
+    color: black;
+    font-size: 200%;
+    font-family: "Mitr", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+#linkatag {
+    text-decoration: none;
+}
+
+#logoutbutton {
+    text-decoration: none;
+    color: white;
+    text-align: center;
+    padding: 30%;
+}
