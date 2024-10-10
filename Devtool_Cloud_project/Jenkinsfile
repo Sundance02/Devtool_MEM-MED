@@ -71,7 +71,7 @@ pipeline {
                     sh 'docker pull $DOCKER_IMAGE'
                     // Run the Docker container
                     // sh 'docker run -d --name mem_med -p 8085:80 $DOCKER_IMAGE'
-                    sh 'docker compose up -d'
+                    sh 'docker run -d --name mem_med -p 8085:80 $DOCKER_IMAGE'
                 }
             }
         }
