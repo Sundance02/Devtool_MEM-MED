@@ -142,7 +142,7 @@ class daily_medicine_detail(LoginRequiredMixin, PermissionRequiredMixin, View):
 
         date_to_take = date(year,month,day)
         present_day = datetime.now().date()
-        present_status = False #คนละวัน
+        present_status = False #คนละวันs
         
         print("ปจบ",present_day)
         print("วันหน้าปฏิทิน", date_to_take)
