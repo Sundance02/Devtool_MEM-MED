@@ -164,10 +164,15 @@
 
                                     <form method="post" action="{% url 'update_status' medicine.id %}">
                                         {% csrf_token %}
-                                        
+                                        {% if present_status == False %}
+                                        <input class="form-check-input checkbox-large" type="checkbox" disabled
+                                        id="check{{medicine.id}}" {% if medicine.is_eaten %} checked {% endif %} 
+                                        name = "is_eaten">
+                                        {% else %}
                                         <input class="form-check-input checkbox-large" type="checkbox"
                                             id="check{{medicine.id}}" {% if medicine.is_eaten %} checked {% endif %} 
-                                            name = "is_eaten">                                       
+                                            name = "is_eaten">
+                                        {% endif %}                                      
                                         <label class="form-check-label" for="flexCheckDefault">
                                             <p style="font-size: 18px;">ทานยาเเล้ว</p>
                                         </label>
@@ -255,9 +260,16 @@
                                     <form method="post" action="{% url 'update_status' medicine.id %}">
                                         {% csrf_token %}
                                         
+                                        {% if present_status == False %}
+                                        <input class="form-check-input checkbox-large" type="checkbox" disabled
+                                        id="check{{medicine.id}}" {% if medicine.is_eaten %} checked {% endif %} 
+                                        name = "is_eaten">
+                                        {% else %}
                                         <input class="form-check-input checkbox-large" type="checkbox"
                                             id="check{{medicine.id}}" {% if medicine.is_eaten %} checked {% endif %} 
-                                            name = "is_eaten">                                       
+                                            name = "is_eaten">
+                                        {% endif %}
+
                                         <label class="form-check-label" for="flexCheckDefault">
                                             <p style="font-size: 18px;">ทานยาเเล้ว</p>
                                         </label>
@@ -347,9 +359,15 @@
                                     <form method="post" action="{% url 'update_status' medicine.id %}">
                                         {% csrf_token %}
                                         
+                                        {% if present_status == False %}
+                                        <input class="form-check-input checkbox-large" type="checkbox" disabled
+                                        id="check{{medicine.id}}" {% if medicine.is_eaten %} checked {% endif %} 
+                                        name = "is_eaten">
+                                        {% else %}
                                         <input class="form-check-input checkbox-large" type="checkbox"
                                             id="check{{medicine.id}}" {% if medicine.is_eaten %} checked {% endif %} 
-                                            name = "is_eaten">                                       
+                                            name = "is_eaten">
+                                        {% endif %}                                         
                                         <label class="form-check-label" for="flexCheckDefault">
                                             <p style="font-size: 18px;">ทานยาเเล้ว</p>
                                         </label>
@@ -438,9 +456,15 @@
                                     <form method="post" action="{% url 'update_status' medicine.id %}">
                                         {% csrf_token %}
                                         
+                                        {% if present_status == False %}
+                                        <input class="form-check-input checkbox-large" type="checkbox" disabled
+                                        id="check{{medicine.id}}" {% if medicine.is_eaten %} checked {% endif %} 
+                                        name = "is_eaten">
+                                        {% else %}
                                         <input class="form-check-input checkbox-large" type="checkbox"
                                             id="check{{medicine.id}}" {% if medicine.is_eaten %} checked {% endif %} 
-                                            name = "is_eaten">                                       
+                                            name = "is_eaten">
+                                        {% endif %}                                       
                                         <label class="form-check-label" for="flexCheckDefault">
                                             <p style="font-size: 18px;">ทานยาเเล้ว</p>
                                         </label>

@@ -141,6 +141,18 @@ class daily_medicine_detail(LoginRequiredMixin, PermissionRequiredMixin, View):
     def get(self, request, year, month, day):
 
         date_to_take = date(year,month,day)
+        present_day = datetime.now().date()
+        present_status = False #คนละวัน
+        
+        print("ปจบ",present_day)
+        print("วันหน้าปฏิทิน", date_to_take)
+
+        if(present_day == date_to_take ):
+            present_status = True #วันเดียวกัน
+        
+        print(present_status)
+
+        
         user = User.objects.get(pk=request.user.id)
         patient = Patient.objects.get(user = user) #fix ไว้
         medicine_sche = MedicationSchedule.objects.filter(patient = patient, date_to_take = date_to_take)
@@ -160,6 +172,7 @@ class daily_medicine_detail(LoginRequiredMixin, PermissionRequiredMixin, View):
         #ทานยาเช้า
         medicine_morning = MedicationSchedule.objects.filter(patient = patient, date_to_take = date_to_take, time_to_take = 'ตอนเช้า')
         morning_status = True
+
         for medicine in medicine_morning:
             if medicine.is_eaten is False: 
                 morning_status = False
@@ -198,10 +211,13 @@ class daily_medicine_detail(LoginRequiredMixin, PermissionRequiredMixin, View):
         if(not medicine_night):
             night_status = 2
 
+        
+
+
         context = {"patient":patient, "medicine_totake":medicine_sche, "th_month":th_month, 'day':day, "year":year, "all_status":all_status,
                     "morning_status":morning_status, "noon_status":noon_status, "eve_status":eve_status, "night_status":night_status,
-                    "medicine_morning":medicine_morning, "medicine_noon":medicine_noon, "medicine_eve":medicine_eve, "medicine_night":medicine_night,
-                    "form":form}
+                    "medicine_morning":medicine_morning, "medicine_noon":medicine_noon, "medicine_eve":medicine_eve, "medicine_night":medicine_night, 'present_day':present_day,
+                    "form":form, 'present_status':present_status}
         return render(request, 'dailymedicinedetail.html', context)
 
 
