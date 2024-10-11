@@ -221,7 +221,7 @@ class calendar(LoginRequiredMixin, PermissionRequiredMixin, View):
             year = int(year)
             month = int(month)
 
-        cal = cale.Calendar()
+        cal = cale.Calendar(firstweekday=6)
         month_days = cal.monthdayscalendar(year, month)
 
         log_dates = {log.date_to_take.day for log in log if log.date_to_take.year == year and log.date_to_take.month == month and log.is_eaten == None}
@@ -243,6 +243,7 @@ class calendar(LoginRequiredMixin, PermissionRequiredMixin, View):
             next_year = year
 
         patient_age = year-patient.birthdate.year
+
 
         return render(request, 'calendar.html', {
             'month_days': month_days,
