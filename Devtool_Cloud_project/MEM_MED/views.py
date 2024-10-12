@@ -242,7 +242,7 @@ class calendar(LoginRequiredMixin, PermissionRequiredMixin, View):
         cal = cale.Calendar(firstweekday=6)
         month_days = cal.monthdayscalendar(year, month)
 
-        log_dates = {log.date_to_take.day for log in log if log.date_to_take.year == year and log.date_to_take.month == month and log.is_eaten == None}
+        log_dates = {log.date_to_take.day for log in log if log.date_to_take.year == year and log.date_to_take.month == month and log.is_eaten == None and log.date_to_take > present_day}
         log_dates_missed = {log.date_to_take.day for log in log if log.date_to_take.year == year and log.date_to_take.month == month and (log.is_eaten == False or log.date_to_take <= present_day)}
         log_dates_not_missed = {log.date_to_take.day for log in log if log.date_to_take.year == year and log.date_to_take.month == month and (log.is_eaten == True or log.date_to_take <= present_day)}
 
