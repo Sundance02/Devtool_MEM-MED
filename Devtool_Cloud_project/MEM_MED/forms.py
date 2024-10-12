@@ -79,7 +79,7 @@ class AddDailyMedicineForm(ModelForm):
                   "instructions"]
         widgets = {
             'date_to_take': forms.DateInput(attrs={'type': 'date'}),
-            'is_eaten': forms.BooleanField(required=False, initial=None)
+            'is_eaten': forms.BooleanField(initial=None)
         }
 
 class MedicationScheduleForm(forms.ModelForm):
