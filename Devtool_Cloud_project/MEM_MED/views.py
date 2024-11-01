@@ -21,6 +21,23 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.views.generic import FormView
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
+class report(View):
+    def get(self, request):
+        user = Patient.objects.get(user__id = request.user.id)
+        return render(request, 'report.html', {"user":user})
+
+class side(View):
+    def get(self, request):
+        user = Patient.objects.get(user__id = request.user.id)
+        return render(request, 'side-effects.html', {"user":user})
+    
+class notification(View):
+    def get(self, request):
+        user = Patient.objects.get(user__id = request.user.id)
+        noti = DoctorAppointment.objects.filter(patient = user)
+        return render(request, 'notification.html', {"user":user, "notis":noti})
+
+
 class RedirectView(View):
     def get(self, request):
         return redirect("login")
@@ -29,6 +46,7 @@ class Login(View):
     def get(self, request):
         form = AuthenticationForm()
         return render(request, 'login.html', {"form": form})
+    @csrf_exempt
     def post(self, request):
         form = AuthenticationForm(data=request.POST)
         if form.is_valid():

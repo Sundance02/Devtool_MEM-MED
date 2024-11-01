@@ -20,4 +20,7 @@ urlpatterns = [
     path('appointment/<int:id>', views.add_appointment.as_view(), name='addappointment'),
 
 
+    path('side-effect/', views.side.as_view(), name='side-effect'),
+    path('notification/', views.notification.as_view(), name='notification'),
+    path('report/', views.report.as_view(), name='report'),
 ]
