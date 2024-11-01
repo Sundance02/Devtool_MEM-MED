@@ -15,4 +15,7 @@ urlpatterns = [
     path("daily-medicine/delete/<int:pk>", views.DailyMedicineDeleteView.as_view(), name="delete-daily-medicine"),
     path('update-medicine-status/<int:medicine_id>/', views.update_medicine_status.as_view(), name='update_status'),
 
+    path('side-effect/', views.side.as_view(), name='side-effect'),
+    path('notification/', views.notification.as_view(), name='notification'),
+    path('report/', views.report.as_view(), name='report'),
 ]
