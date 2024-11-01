@@ -63,6 +63,9 @@
                 <p><strong>โรคประจำตัว:</strong> {{patient_target.medical_history}}</p>
                 <p><strong>เบอร์ติดต่อ:</strong> 087-XXXX-XXX</p>
             </div>
+            <div style="text-align: center;">
+                <a class="btn btn-success" href="{% url 'addappointment' patient_target.id %}">เพิ่มนัดหมาย</a>
+            </div>
         </div>
     </div>
 </div>

@@ -34,12 +34,18 @@
         <th>
             Time
         </th>
-        {% for i in appoint %}
-        <tr>
-            <td>{{ i.patient.user.first_name }} {{ i.patient.user.last_name }}</td>
-            <td><strong>{{ i.appointment_time }}</strong></td>
-        </tr>
-        {% endfor %}
+        <th>
+            Note
+        </th>
+        {% if appoint %}
+            {% for i in appoint %}
+            <tr>
+                <td>{{ i.patient.user.first_name }} {{ i.patient.user.last_name }}</td>
+                <td><strong>{{ i.appointment_time }}</strong></td>
+                <td>{{ i.notes }}</td>
+            </tr>
+            {% endfor %}
+        {% endif %}
     </table>
 </div>
 {% endblock %}

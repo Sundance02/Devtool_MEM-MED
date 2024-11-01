@@ -15,7 +15,6 @@ class Patient(models.Model):
         return self.name
 
 class Doctor(models.Model):
-
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     birthdate = models.DateField()
@@ -83,8 +82,8 @@ class MedicationLog(models.Model):
         return f"{self.patient.name} - {self.medication.name} on {self.date_taken}"
 
 class DoctorAppointment(models.Model):
-    patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
-    doctor_name = models.CharField(max_length=255)
+    patient = models.ForeignKey(Patient, on_delete=models.PROTECT)
+    doctor = models.ForeignKey(Doctor, on_delete=models.PROTECT, null=True)
     appointment_date = models.DateField()
     appointment_time = models.TimeField()
     notes = models.TextField(blank=True, null=True)

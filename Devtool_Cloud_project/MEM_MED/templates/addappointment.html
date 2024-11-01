@@ -1,0 +1,120 @@
+{% extends 'layout.html' %}
+{% block name %}Appointment{% endblock %}
+
+{% block mycss %}
+<style>
+    /* styles.css */
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 20px;
+}
+
+.appointment-container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.appointment-title {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333333;
+}
+
+.appointment-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555555;
+}
+
+.form-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    transition: border-color 0.2s ease;
+}
+
+.form-input:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.notes-textarea {
+    height: 100px; /* Adjust height for notes */
+}
+
+.error-message {
+    color: red;
+    font-size: 12px;
+}
+
+.submit-button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s ease;
+}
+
+.submit-button:hover {
+    background-color: #0056b3;
+}
+
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="appointment-container">
+    <h2 class="appointment-title">เพิ่มนัดหมาย</h2>
+    <form method="post" class="appointment-form">
+        {% csrf_token %}
+        <div class="form-group">
+            {{ form.appointment_date.label }}
+            {{ form.appointment_date }}
+            {% for error in form.appointment_date.errors %}
+                <span class="error-message">{{ error }}</span>
+            {% endfor %}
+        </div>
+        
+        <div class="form-group">
+            {{ form.appointment_time.label }}
+            {{ form.appointment_time }}
+            {% for error in form.appointment_time.errors %}
+                <span class="error-message">{{ error }}</span>
+            {% endfor %}
+        </div>
+        
+        <div class="form-group">
+            {{ form.notes.label }}
+            {{ form.notes }}
+            {% for error in form.notes.errors %}
+                <span class="error-message">{{ error }}</span>
+            {% endfor %}
+        </div>
+        
+        <button type="submit" class="submit-button">เพิ่มนัดหมาย</button>
+    </form>
+</div>
+{% endblock %}

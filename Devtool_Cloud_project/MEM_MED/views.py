@@ -287,7 +287,6 @@ class doc_calendar(LoginRequiredMixin, PermissionRequiredMixin, View):
     permission_required = ["MEM_MED.view_medicationlog"]
     
     def get(self, request, year=None, month=None):
-        patient = Patient.objects.get(user = request.user)
         # log = MedicationSchedule.objects.filter(patient = patient)
         appoint_q = DoctorAppointment.objects.all()
 
@@ -308,8 +307,11 @@ class doc_calendar(LoginRequiredMixin, PermissionRequiredMixin, View):
         # log_dates_missed = {log.date_to_take.day for log in log if log.date_to_take.year == year and log.date_to_take.month == month and (log.is_eaten == False or log.is_eaten == None) and log.date_to_take <= present_day}
         # log_dates_not_missed = {log.date_to_take.day for log in log if log.date_to_take.year == year and log.date_to_take.month == month and log.is_eaten == True and log.date_to_take <= present_day}
 
-        appointment = {log.appointment_date.day for log in appoint_q if log.appointment_date.year == year and log.appointment_date.month == month and log.appointment_date >= present_day}
-        print(appointment)
+        if appoint_q.exists():
+            appointment = {log.appointment_date.day for log in appoint_q if log.appointment_date.year == year and log.appointment_date.month == month and log.appointment_date >= present_day}
+            print(appointment)
+        else:
+            appointment = {}
 
         if month == 1:
             prev_month = 12
@@ -325,7 +327,6 @@ class doc_calendar(LoginRequiredMixin, PermissionRequiredMixin, View):
             next_month = month + 1
             next_year = year
 
-        patient_age = year-patient.birthdate.year
 
 
         return render(request, 'doc_calendar.html', {
@@ -340,8 +341,7 @@ class doc_calendar(LoginRequiredMixin, PermissionRequiredMixin, View):
             'log_dates': appointment, 
             # 'log_dates_missed': log_dates_missed,
             # 'log_dates_not_missed': log_dates_not_missed,
-            'patient': patient,
-            'patient_age': patient_age
+            # 'patient': patient,
         })
 
 def day_view(request, year, month, day):
@@ -426,6 +426,8 @@ class PatientView(LoginRequiredMixin, PermissionRequiredMixin, View):
 
         medicationschedule = MedicationSchedule.objects.filter(patient = patient_target)
         
+
+
         # เพิ่มอายุใน context
         context = {
             "patient_target": patient_target,
@@ -434,6 +436,9 @@ class PatientView(LoginRequiredMixin, PermissionRequiredMixin, View):
         }
 
         return render(request, 'Patient.html', context)
+    
+
+    # def post(self, request, pk):
 
 class DailyMedicineAddView(LoginRequiredMixin, PermissionRequiredMixin, View):
     login_url = '/login/'
@@ -496,3 +501,26 @@ class appointment(LoginRequiredMixin, PermissionRequiredMixin, View):
         dada = str(year)+"-"+str(month)+"-"+str(day)
         appointment = DoctorAppointment.objects.filter(appointment_date = dada).order_by('appointment_time')
         return render(request, 'appointment.html', {'appoint':appointment, "date":dada})
+
+class add_appointment(LoginRequiredMixin, PermissionRequiredMixin, View):
+    login_url = '/login/'
+    permission_required = ["MEM_MED.view_patient", "MEM_MED.view_medicationschedule", "MEM_MED.change_medicationschedule"]
+
+    def get(self, request, id):
+        form = AppointmentForm()
+        return render(request, 'addappointment.html', {'form':form})
+    
+    
+    def post(self, request, id):
+        form = AppointmentForm(request.POST)
+        patient = Patient.objects.get(pk=id)
+        doctor = Doctor.objects.get(user=request.user)
+
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.patient = patient
+            obj.doctor = doctor
+            obj.save()
+            return redirect('patient-detail', id)
+        
+        return render(request, 'addappointment.html', {'form':form})

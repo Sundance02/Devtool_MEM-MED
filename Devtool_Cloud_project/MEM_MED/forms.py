@@ -91,3 +91,36 @@ class MedicationScheduleForm(forms.ModelForm):
         self.fields['is_eaten'].widget = forms.HiddenInput()
 
 
+from django import forms
+from .models import DoctorAppointment
+
+class AppointmentForm(forms.ModelForm):
+    class Meta:
+        model = DoctorAppointment
+        fields = ['appointment_date', 'appointment_time', 'notes']
+        widgets = {
+            'appointment_date': forms.DateInput(attrs={
+                'class': 'form-input', 
+                'placeholder': 'YYYY-MM-DD',
+                'type': 'date'  # HTML5 date input
+            }),
+            'appointment_time': forms.TimeInput(attrs={
+                'class': 'form-input', 
+                'placeholder': 'HH:MM',
+                'type': 'time'  # HTML5 time input
+            }),
+            'notes': forms.Textarea(attrs={
+                'class': 'form-input notes-textarea', 
+                'placeholder': 'Any additional notes'
+            }),
+        }
+
+    def clean_appointment_date(self):
+        appointment_date = self.cleaned_data['appointment_date']
+
+        # Correct the comparison to call .date()
+        if appointment_date <= datetime.now(timezone.utc).date():
+            raise ValidationError("The appointment date cannot be in the past.")
+
+        return appointment_date
+
