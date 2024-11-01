@@ -79,15 +79,7 @@ WSGI_APPLICATION = 'Devtool_Cloud_project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'HOST': '35.198.206.1',
-#         'USER': 'username',
-#         'PASSWORD': 'usernameusername',
-#         'NAME': 'MEM_MED',
-#     }
-# }
+
 
 DATABASES = {
     'default': {

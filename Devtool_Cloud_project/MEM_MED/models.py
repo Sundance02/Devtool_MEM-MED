@@ -63,7 +63,7 @@ class MedicationSchedule(models.Model):
         choices = Before_After_Meal.choices
     )
 
-    is_eaten = models.BooleanField(default=False, null=False)
+    is_eaten = models.BooleanField(default=None, null=True)
     quantity = models.CharField(max_length=50)
     instructions = models.TextField(blank=True, null=True)
     date_added = models.DateField(auto_now_add=True)
