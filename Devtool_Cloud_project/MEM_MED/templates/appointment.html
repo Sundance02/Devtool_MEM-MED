@@ -1,0 +1,45 @@
+{% extends 'layout.html' %}
+{% block name %}Appointment{% endblock %}
+
+{% block mycss %}
+<style>
+    table {
+        margin: auto; /* Centers the table horizontally */
+        padding-top: 10%; /* Optional, for extra spacing at the top */
+        border-collapse: collapse; /* Ensures borders are cleanly aligned */
+        width: 100%;
+        text-align: center;
+    }
+    td {
+        padding: 20px; /* Adds padding inside table cells */
+    }
+    tr:nth-child(odd) {
+        background-color: #e4e4e4; /* Light grey for odd rows */
+    }
+    tr:nth-child(even) {
+        background-color: #ffffff; /* White for even rows */
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div style="text-align: center;">
+    <strong>วันที่ {{ date }}</strong>
+</div>
+<div>
+    <table>
+        <th>
+            Name
+        </th>
+        <th>
+            Time
+        </th>
+        {% for i in appoint %}
+        <tr>
+            <td>{{ i.patient.user.first_name }} {{ i.patient.user.last_name }}</td>
+            <td><strong>{{ i.appointment_time }}</strong></td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}
