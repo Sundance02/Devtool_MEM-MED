@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ประวัติอาการผลข้างเคียง</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: #e6f7ff;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .home-icon {
+            width: 24px;
+            height: 24px;
+        }
+
+        .notification {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .notification-count {
+            background: #000;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 12px;
+        }
+
+        .profile {
+            padding: 20px;
+        }
+
+        .profile-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #f0f0f0;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        .side-effects-section {
+            padding: 20px;
+        }
+
+        .date-section {
+            background: #f8f8f8;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .date-header {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .date-number {
+            font-weight: bold;
+        }
+
+        .medicine-card {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .medicine-image {
+            width: 60px;
+            height: 60px;
+            background: #f0f0f0;
+            border-radius: 8px;
+        }
+
+        .medicine-info {
+            flex: 1;
+        }
+
+        .medicine-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .medicine-details {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .reference-number {
+            font-size: 12px;
+            color: #888;
+            word-break: break-all;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <svg class="home-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+            <div class="notification">
+                <svg class="home-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                </svg>
+                <span class="notification-count">20</span>
+            </div>
+        </header>
+
+        <div class="profile">
+            <h1>ประวัติอาการผลข้างเคียง</h1>
+            <div class="profile-info">
+                <div class="avatar"></div>
+                <div>เด็กชาย Nontakorn Pumloyfa</div>
+            </div>
+            <h2>อาการผลข้างเคียง</h2>
+        </div>
+
+        <div class="side-effects-section">
+            <div class="date-section">
+                <div class="date-header">
+                    <span>1.</span>
+                    <span>วันที่เริ่ม: 31/02/2029</span>
+                </div>
+                
+                <div class="medicine-card">
+                    <div class="medicine-image"></div>
+                    <div class="medicine-info">
+                        <div class="medicine-name">ชื่อยา: cartoon ahh medicine</div>
+                        <div class="medicine-details">ปริมาณ: 1 เม็ด</div>
+                        <div class="medicine-details">หลังกินเสร็จ: นอน คลื่นไส้อาเจียน</div>
+                    </div>
+                </div>
+
+                <div class="medicine-card">
+                    <div class="medicine-image"></div>
+                    <div class="medicine-info">
+                        <div class="medicine-name">ชื่อยา: cartoon ahh medicine</div>
+                        <div class="medicine-details">ปริมาณ: 1 เม็ด</div>
+                        <div class="medicine-details">หลังกินเสร็จ: นอน คลื่นไส้อาเจียน</div>
+                    </div>
+                </div>
+
+                <div class="reference-number">
+                    อ้างอิงที่เลขยา:<br>
+                    UUOIRFZASKJDFAKSDFMSAHDKASJ DKLASIDNLASDISKADJASDHKDJASK ODJASKDJ
+                </div>
+            </div>
+
+            <div class="date-section">
+                <div class="date-header">
+                    <span>2.</span>
+                    <span>วันที่เริ่ม: 12/12/2028</span>
+                </div>
+                
+                <div class="medicine-card">
+                    <div class="medicine-image"></div>
+                    <div class="medicine-info">
+                        <div class="medicine-name">ชื่อยา: cartoon ahh medicine</div>
+                        <div class="medicine-details">ปริมาณ: 1 เม็ด</div>
+                        <div class="medicine-details">หลังกินเสร็จ: นอน คลื่นไส้อาเจียน</div>
+                    </div>
+                </div>
+
+                <div class="medicine-card">
+                    <div class="medicine-image"></div>
+                    <div class="medicine-info">
+                        <div class="medicine-name">ชื่อยา: cartoon ahh medicine</div>
+                        <div class="medicine-details">ปริมาณ: 1 เม็ด</div>
+                        <div class="medicine-details">หลังกินเสร็จ: นอน คลื่นไส้อาเจียน</div>
+                    </div>
+                </div>
+
+                <div class="reference-number">
+                    อ้างอิงที่เลขยา:<br>
+                    UUOIRFZASKJDFAKSDFMSAHDKASJ DKLASIDNLASDISKADJASDHKDJASK ODJASKDJ
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

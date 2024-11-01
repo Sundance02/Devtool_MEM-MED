@@ -17,9 +17,9 @@
         </center>
     </section>
     <div class="container pl-5">
-        {{ form.non_field_errors }}
-        <form action="{% url 'login' %}" method="POST">
+        <form action="{% url 'login' %}" method="POST">          
             {% csrf_token %}
+            {{ form.non_field_errors }}
             <div class="field">
                 {{ form.username.errors }}
                 <label class="label" for="{{ form.username.id_for_label }}">Username</label>
