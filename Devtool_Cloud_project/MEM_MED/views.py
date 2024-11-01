@@ -51,11 +51,14 @@ class Login(View):
         form = AuthenticationForm(data=request.POST)
         if form.is_valid():
             user = form.get_user()
-            login(request,user)
+            login(request, user)
+            current_date = datetime.now()
+            year, month = current_date.year, current_date.month
+
             if user.groups.filter(name="Patient").exists():
-                return redirect('calendar')
+                return redirect('calendar', year=year, month=month)
             elif user.groups.filter(name="Doctor").exists():
-                return redirect("patient-list")
+                return redirect('doc_calendar', year=year, month=month)
 
         return render(request,'login.html', {"form":form})
 
@@ -295,6 +298,69 @@ class calendar(LoginRequiredMixin, PermissionRequiredMixin, View):
             'patient': patient,
             'patient_age': patient_age
         })
+    
+
+class doc_calendar(LoginRequiredMixin, PermissionRequiredMixin, View):
+    login_url = '/login/'
+    permission_required = ["MEM_MED.view_medicationlog"]
+    
+    def get(self, request, year=None, month=None):
+        patient = Patient.objects.get(user = request.user)
+        # log = MedicationSchedule.objects.filter(patient = patient)
+        appoint_q = DoctorAppointment.objects.all()
+
+        present_day = datetime.now().date()
+
+        if year is None or month is None:
+            now = datetime.now()
+            year = now.year
+            month = now.month
+        else:
+            year = int(year)
+            month = int(month)
+
+        cal = cale.Calendar(firstweekday=6)
+        month_days = cal.monthdayscalendar(year, month)
+
+        # log_dates = {log.date_to_take.day for log in log if log.date_to_take.year == year and log.date_to_take.month == month and log.is_eaten == None and log.date_to_take > present_day}
+        # log_dates_missed = {log.date_to_take.day for log in log if log.date_to_take.year == year and log.date_to_take.month == month and (log.is_eaten == False or log.is_eaten == None) and log.date_to_take <= present_day}
+        # log_dates_not_missed = {log.date_to_take.day for log in log if log.date_to_take.year == year and log.date_to_take.month == month and log.is_eaten == True and log.date_to_take <= present_day}
+
+        appointment = {log.appointment_date.day for log in appoint_q if log.appointment_date.year == year and log.appointment_date.month == month and log.appointment_date >= present_day}
+        print(appointment)
+
+        if month == 1:
+            prev_month = 12
+            prev_year = year - 1
+        else:
+            prev_month = month - 1
+            prev_year = year
+
+        if month == 12:
+            next_month = 1
+            next_year = year + 1
+        else:
+            next_month = month + 1
+            next_year = year
+
+        patient_age = year-patient.birthdate.year
+
+
+        return render(request, 'doc_calendar.html', {
+            'month_days': month_days,
+            'year': year,
+            'month': month,
+            'month_name': cale.month_name[month],
+            'prev_year': prev_year,
+            'prev_month': prev_month,
+            'next_year': next_year,
+            'next_month': next_month,
+            'log_dates': appointment, 
+            # 'log_dates_missed': log_dates_missed,
+            # 'log_dates_not_missed': log_dates_not_missed,
+            'patient': patient,
+            'patient_age': patient_age
+        })
 
 def day_view(request, year, month, day):
     return HttpResponse(f"You clicked on {day}/{month}/{year}")
@@ -438,3 +504,13 @@ class DailyMedicineEditView(LoginRequiredMixin, PermissionRequiredMixin, View):
             print(form.errors)
             form = AddDailyMedicineForm(instance=medication_schedule_target)
             return render(request, 'edit-daily-medicine.html', {"form" : form})
+
+
+class appointment(LoginRequiredMixin, PermissionRequiredMixin, View):
+    login_url = '/login/'
+    permission_required = ["MEM_MED.view_patient", "MEM_MED.view_medicationschedule", "MEM_MED.change_medicationschedule"]
+
+    def get(self, request, year, month, day):
+        dada = str(year)+"-"+str(month)+"-"+str(day)
+        appointment = DoctorAppointment.objects.filter(appointment_date = dada).order_by('appointment_time')
+        return render(request, 'appointment.html', {'appoint':appointment, "date":dada})

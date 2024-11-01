@@ -1,0 +1,89 @@
+{% extends 'layout.html' %}
+{% block name %}{{ month_name }} {{ year }}{% endblock %}
+
+{% block mycss %}
+<style>
+    td {
+        cursor: pointer;
+    }
+
+    td:hover {
+        background-color: #f0f0f0;
+    }
+
+    .highlight {
+        background-color: rgb(192, 230, 255) !important;
+        /* Use !important to ensure it overrides Bootstrap */
+    }
+
+
+    .patient-card {
+        background-color: #e9f7fc;
+        /* Light blue background */
+        border-radius: 10px;
+        padding: 20px;
+        margin: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .patient-card h5 {
+        margin-bottom: 10px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="text-center">{{ month_name }} {{ year }}</h1>
+    <div class="text-center mb-3">
+        <a class="btn btn-secondary" href="{% url 'doc_calendar' year=prev_year month=prev_month %}"><</a>
+                <a class="btn btn-secondary" href="{% url 'doc_calendar' year=next_year month=next_month %}">></a>
+    </div>
+    <table class="table table-bordered text-center">
+        <thead>
+            <tr>
+                <th style="background-color: #80c0dd;" scope="col">Sun</th>
+                <th style="background-color: #ddecf3;" scope="col">Mon</th>
+                <th style="background-color: #ddecf3;" scope="col">Tue</th>
+                <th style="background-color: #ddecf3;" scope="col">Wed</th>
+                <th style="background-color: #ddecf3;" scope="col">Thu</th>
+                <th style="background-color: #ddecf3;" scope="col">Fri</th>
+                <th style="background-color: #80c0dd;" scope="col">Sat</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for week in month_days %}
+            <tr>
+                {% for day in week %}
+                <td
+                    class="{% if day in log_dates %}highlight{% endif %}">
+                    {% if day != 0 %}
+                    <a href="{% url 'appointment' year month day %}" style="text-decoration: none; color: black;">{{ day }}</a>
+                    {% else %}
+                    &nbsp;
+                    {% endif %}
+                </td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="patient-card">
+                <p style="font-size: 90%;"><strong>ชื่อ: </strong>{{user.first_name}} {{user.last_name}}</p>
+                <p><strong>วันเกิด: </strong> {{patient.birthdate}}</p>
+                <p><strong>อายุ:</strong> {{patient_age}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>เพศ:</strong> ชาย</p>
+                <p><strong>ยาที่แพ้:</strong> {{patient.medical_history}}</p>
+                <p><strong>โรคประจำตัว:</strong> {{patient.allergies}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+{% endblock %}
